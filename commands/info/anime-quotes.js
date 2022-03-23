@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require('discord.js')
+const { CommandInteraction, EmbedBuilder , ApplicationCommandOptionType } = require('discord.js')
 
 module.exports = {
 	name: 'quote',
@@ -14,7 +14,7 @@ module.exports = {
 		{
 			name: 'name',
 			description: 'which anime do you want the quote from',
-			type: 'STRING',
+			type: ApplicationCommandOptionType.String,
 			required: false
 		}
 	],
@@ -48,7 +48,7 @@ module.exports = {
 				slash.quote()
 			}
 		} catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

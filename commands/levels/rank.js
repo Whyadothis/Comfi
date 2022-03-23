@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed, MessageAttachment } = require("discord.js");
+const { CommandInteraction, EmbedBuilder,  ApplicationCommandOptionType  } = require("discord.js");
 const guilds = require("../../models/guild")
 const users = require("../../models/users")
 const rankCard = require("../../functions/RankCard")
@@ -17,7 +17,7 @@ module.exports = {
   ownerOnly: false,
   options: [
     {
-      type: 'USER',
+      type: ApplicationCommandOptionType.User,
       description: 'user to check rank for',
       name: 'user',
       required: false,
@@ -62,7 +62,7 @@ module.exports = {
       }
 
     } catch (e) {
-      let emed = new MessageEmbed()
+      let emed = new EmbedBuilder()
         .setTitle(`${bot.error} • Error Occured`)
         .setDescription(`\`\`\`${e.stack}\`\`\``)
         .setColor(bot.color)

@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed, Util } = require('discord.js')
+const { CommandInteraction, EmbedBuilder, Util } = require('discord.js')
 const simplydjs = require('simply-djs')
 
 module.exports = {
@@ -16,17 +16,17 @@ module.exports = {
 	options: [
 		{
 			name: 'add',
-			type: 'SUB_COMMAND',
+			type: 1,
 			description: 'Add emoji from other server using name or url',
 			options: [
 				{
-					type: 'STRING',
+					type: 3,
 					description: 'Server Emote or Url',
 					name: 'emoji',
 					required: true
 				},
 				{
-					type: 'STRING',
+					type: 3,
 					name: 'name',
 					description: 'Custom Name for Emoji',
 					required: false
@@ -35,11 +35,11 @@ module.exports = {
 		},
 		{
 			name: 'addmany',
-			type: 'SUB_COMMAND',
+			type: 1,
 			description: 'Add Multiple Emotes From another server',
 			options: [
 				{
-					type: 'STRING',
+					type: 3,
 					description: 'Emotes from other server',
 					name: 'emote',
 					required: true
@@ -48,7 +48,7 @@ module.exports = {
 		},
 		{
 			name: 'stats',
-			type: 'SUB_COMMAND',
+			type: 1,
 			description: 'Shows a list of server emotes'
 		}
 	],
@@ -68,16 +68,16 @@ module.exports = {
 try {
 		if (sub === 'add') {
 			let maxLength
-			if (interaction.guild.premiumTier === 'NONE') {
+			if (interaction.guild.premiumTier === 'None') {
 				maxLength = 100
 			}
-			if (interaction.guild.premiumTier === 'TIER_1') {
+			if (interaction.guild.premiumTier === 'Tier1') {
 				maxLength = 200
 			}
-			if (interaction.guild.premiumTier === 'TIER_2') {
+			if (interaction.guild.premiumTier === 'Tier2') {
 				maxLength = 300
 			}
-			if (interaction.guild.premiumTier === 'TIER_3') {
+			if (interaction.guild.premiumTier === 'Tier3') {
 				maxLength = 500
 			}
 			if (interaction.guild.emojis.cache.size >= maxLength) {
@@ -226,7 +226,7 @@ if (!emoji) return await interaction.editReply(`${bot.error} • Send an emote i
 
 				let OverallEmoji = Number(Animated) + Number(EmojiCount)
 
-				let Embed1 = new MessageEmbed()
+				let Embed1 = new EmbedBuilder()
 					.setTitle(
 						`Animated Emojis in ${interaction.guild.name} ~ ${Animated}.`
 					)
@@ -234,7 +234,7 @@ if (!emoji) return await interaction.editReply(`${bot.error} • Send an emote i
 					.setDescription(`${EmojisAnimated}`)
 					.setColor(bot.color)
 
-				let Embed2 = new MessageEmbed()
+				let Embed2 = new EmbedBuilder()
 					.setTitle(
 						`Non-Animated Emojis in ${interaction.guild.name} ~ ${EmojiCount}.`
 					)
@@ -255,7 +255,7 @@ if (!emoji) return await interaction.editReply(`${bot.error} • Send an emote i
 				})
       }
 			} catch (e) {
-				let emed = new MessageEmbed()
+				let emed = new EmbedBuilder()
 					.setTitle(`${bot.error} • Error Occured`)
 					.setDescription(`\`\`\`${e.stack}\`\`\``)
 					.setColor(bot.color)

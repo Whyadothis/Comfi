@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed, MessageCollector} = require("discord.js")
+const { CommandInteraction, EmbedBuilder, MessageCollector} = require("discord.js")
 const guilds = require("../../models/guild")
 
 module.exports = {
@@ -68,7 +68,7 @@ async function reRun(member, bot, interaction) {
     const channel = interaction.channel
     if(!channel) return;
     const word = getWord()
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
     .setImage(`https://luminabot.xyz/api/image/captcha?color=FFFFFF&text=${word}`)
     .setColor(bot.color)
     const hoisterMsg = await channel.send({content: `${format(guild.verification_message)}`, embeds: [embed]})

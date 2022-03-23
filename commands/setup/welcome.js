@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require('discord.js')
+const { CommandInteraction, EmbedBuilder } = require('discord.js')
 const guilds = require('../../models/guild')
 const embedCreate = require('../../functions/embed')
 
@@ -18,12 +18,12 @@ module.exports = {
     {
       name: 'toggle',
       description: 'Toggle the system on or off',
-      type: 'SUB_COMMAND',
+      type: 1,
       options: [
         {
           name: 'option',
           description: 'Options for welcome toggle',
-          type: 'STRING',
+          type: 3,
           required: true,
           choices: [
             {
@@ -41,10 +41,10 @@ module.exports = {
     {
       name: 'embed-toggle',
       description: 'Embed Toogle for welcome system',
-      type: 'SUB_COMMAND',
+      type: 1,
       options: [
         {
-          type: 'STRING',
+          type: 3,
           description: 'Options for welcome system embed toggle',
           name: 'options',
           required: true,
@@ -64,10 +64,10 @@ module.exports = {
     {
       name: 'dm-toggle',
       description: 'Dm Toogle for welcome system',
-      type: 'SUB_COMMAND',
+      type: 1,
       options: [
         {
-          type: 'STRING',
+          type: 3,
           description: 'Options for welcome dm toggle',
           name: 'options',
           required: true,
@@ -86,11 +86,11 @@ module.exports = {
     },
     {
       name: "joinrole",
-      type: "SUB_COMMAND",
+      type: 1,
       description: "Add role to user upon joining",
       options: [
         {
-          type: 'STRING',
+          type: 3,
           description: 'Options to enable or disable joinrole',
           name: 'options',
           required: true,
@@ -109,43 +109,43 @@ module.exports = {
           name: "role",
           description: `Mention the roles to add to user upon joining`,
           required: true,
-          type: "ROLE"
+          type: 8
         },
       ],
     },
     {
       name: 'channel',
       description: 'Channel for welcome system',
-      type: 'SUB_COMMAND',
+      type: 1,
       options: [
         {
           name: 'name',
-          type: 'CHANNEL',
+          type: 7,
           description: 'Channel for welcome detector',
           required: true,
-          channelTypes: ['GUILD_TEXT']
+          channelTypes: [0]
         }
       ]
     },
     {
       name: 'embed',
       description: 'Setup embed for welcome system',
-      type: 'SUB_COMMAND'
+      type: 1
     },
     {
       name: 'content',
       description: 'Setup content when embedtoggle is off',
-      type: 'SUB_COMMAND',
+      type: 1,
       options: [
         {
           name: 'message',
-          type: 'STRING',
+          type: 3,
           description: 'Message for welcome system',
           required: true
         },
         {
           name: 'image',
-          type: 'STRING',
+          type: 11,
           description: 'Image url for welcome system',
           required: false
         }
@@ -154,7 +154,7 @@ module.exports = {
     {
       name: "help",
       description: "Variables for welcome system",
-      type: "SUB_COMMAND"
+      type: 1
     },
   ],
   userperm: ['MANAGE_GUILD'],
@@ -285,7 +285,7 @@ module.exports = {
 
       if (sub === 'content') {
         let msg = interaction.options.getString('message')
-        let img = interaction.options.getString('image')
+        let img = interaction.options.getAttachment('image')
 
         await guilds.findOneAndUpdate(
           { guildId: interaction.guild.id },
@@ -299,7 +299,7 @@ module.exports = {
           await guilds.findOneAndUpdate(
             { guildId: interaction.guild.id },
             {
-              welcome_image: img
+              welcome_image: img.url
             }
           )
         return await bot.successEmbed(bot, interaction, `**Welcome Image Has Been Set Successfully in ${img}!**`)
@@ -308,7 +308,7 @@ module.exports = {
 
       if (sub === "help") {
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
           .setTitle(`Welcome System variables`, bot.user.displayAvatarURL())
           .setDescription(`Need Help setting Welcome system?`)
           .addFields(
@@ -324,13 +324,13 @@ module.exports = {
             }
           )
           .setColor(bot.color)
-          .setFooter(`Comfi™ Welcome System`);
+          .setFooter({text:`Comfi™ Welcome System`});
         await interaction.editReply({ embeds: [embed] })
 
       }
 
     } catch (e) {
-      let emed = new MessageEmbed()
+      let emed = new EmbedBuilder()
         .setTitle(`${bot.error} • Error Occured`)
         .setDescription(`\`\`\`${e.stack}\`\`\``)
         .setColor(bot.color)

@@ -6,7 +6,7 @@
 */
 
 const fetch = require('node-fetch');
-const { CommandInteraction, MessageEmbed } = require("discord.js");
+const { CommandInteraction, EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 
 module.exports = {
     name: "github",
@@ -15,7 +15,7 @@ module.exports = {
     ownerOnly: false,
     options: [
         {
-            type: 'STRING',
+            type: ApplicationCommandOptionType.String,
             description: 'Github username',
             name: 'username',
             required: true,
@@ -48,7 +48,7 @@ module.exports = {
 		}
 
 		try {
-			const embed = new MessageEmbed()
+			const embed = new EmbedBuilder()
 				.setColor(bot.color)
 				.setTitle(`${response.login} (${response.id})`)
 				.setDescription(response.bio ? response.bio : 'None')
@@ -66,7 +66,7 @@ module.exports = {
 
 			await interaction.editReply({embeds: [ embed ]});
 		} catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

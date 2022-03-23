@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require('discord.js')
+const { CommandInteraction, EmbedBuilder } = require('discord.js')
 const ms = require('ms')
 const guilds = require('../../models/guild')
 
@@ -18,7 +18,7 @@ module.exports = {
     {
       name: 'add',
       description: 'Timeout Someone',
-      type: 'SUB_COMMAND',
+      type: 1,
       options: [
         {
           name: 'user',
@@ -29,7 +29,7 @@ module.exports = {
         {
           name: 'time',
           description: 'Time Till Timeout  the user in the form of s, m, h, d',
-          type: 'STRING',
+          type: 3,
           required: true
         },
         {
@@ -43,7 +43,7 @@ module.exports = {
     {
       name: 'remove',
       description: 'Remove Timeout from Someone',
-      type: 'SUB_COMMAND',
+      type: 1,
       options: [
         {
           name: 'user',
@@ -121,7 +121,7 @@ module.exports = {
 
           await member.timeout(Time, `${reason}`).then(async () => {
 
-            let embed1 = new MessageEmbed()
+            let embed1 = new EmbedBuilder()
               .setTitle(`__Timeout'ed__`)
               .setDescription(
                 `${bot.tick} • **Moderator: **${
@@ -134,7 +134,7 @@ module.exports = {
               .catch(() => null)
           })
 
-          let embed2 = new MessageEmbed()
+          let embed2 = new EmbedBuilder()
             .setTitle('**__Timeout Report__**')
             .setDescription(
               `${bot.tick} • Timeout'ed **${member.user.tag}** \n${
@@ -173,7 +173,7 @@ await bot.modlog({ Member: member,
         } else {
           await member.timeout(null, `${reason}`)
 
-          const embed = new MessageEmbed()
+          const embed = new EmbedBuilder()
             .setTitle('**__Timeout Report__**')
             .setAuthor(`Request Successful`, bot.user.displayAvatarURL())
             .setDescription(
@@ -191,7 +191,7 @@ await bot.modlog({ Member: member,
         }
       }
     } catch (e) {
-      let emed = new MessageEmbed()
+      let emed = new EmbedBuilder()
         .setTitle(`${bot.error} • Error Occured`)
         .setDescription(`\`\`\`${e.stack}\`\`\``)
         .setColor(bot.color)

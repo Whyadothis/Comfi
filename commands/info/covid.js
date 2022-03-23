@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require('discord.js')
+const { CommandInteraction, EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
 const fetch = require('node-fetch')
 
 module.exports = {
@@ -16,7 +16,7 @@ module.exports = {
 		{
 			name: 'country',
 			description: 'The country you want to track',
-			type: 'STRING',
+			type: ApplicationCommandOptionType.String,
 			required: true
 		}
 	],
@@ -33,7 +33,7 @@ module.exports = {
 		try {
 			const country = interaction.options.getString("country")
 
-			const noArgs = new MessageEmbed()
+			const noArgs = new EmbedBuilder()
 				.setTitle('Missing fields')
 				.setColor(0xff0000)
 				.setDescription(
@@ -51,7 +51,7 @@ module.exports = {
 						let recovered = data.recovered.value.toLocaleString()
 						let deaths = data.deaths.value.toLocaleString()
 
-						const embed = new MessageEmbed()
+						const embed = new EmbedBuilder()
 							.setTitle(`Worldwide COVID-19 Stats 🌎`)
 							.addField('Confirmed Cases', confirmed, true)
 							.addField('Recovered', recovered, true)
@@ -68,7 +68,7 @@ module.exports = {
 						let recovered = data.recovered.value.toLocaleString()
 						let deaths = data.deaths.value.toLocaleString()
 
-						const embed = new MessageEmbed()
+						const embed = new EmbedBuilder()
 							.setTitle(`COVID-19 Stats for **${country}**`)
 							.addField('Confirmed Cases', confirmed, true)
 							.addField('Recovered', recovered, true)
@@ -82,7 +82,7 @@ module.exports = {
 					})
 			}
 		} catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

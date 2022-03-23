@@ -25,7 +25,8 @@ module.exports = async bot => {
 		if (!file?.name) return
 		bot.slashCommands.set(file.name, file)
 
-		if (['MESSAGE', 'USER'].includes(file.type)) delete file.description
+		if (['ApplicationCommandType.Messsage', 'ApplicationCommandType. User'].includes(file.type)) delete file.description
+
 		arrayOfSlashCommands.push(file)
 	})
 

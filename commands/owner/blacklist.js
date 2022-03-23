@@ -7,9 +7,9 @@
 
 const {
   CommandInteraction,
-  MessageActionRow,
-  MessageSelectMenu,
-  MessageEmbed
+  ActionRowBuilder,
+  SelectMenuBuilder,
+  EmbedBuilder
 } = require('discord.js')
 const clients = require('../../models/Client')
 
@@ -19,26 +19,26 @@ module.exports = {
   ownerOnly: true,
   options: [
     {
-      type: 'SUB_COMMAND',
+      type: 1,
       description: 'user to blacklist',
       name: 'add-user',
       options: [
         {
           name: 'user',
-          type: 'USER',
+          type: 6,
           description: 'user to add to blacklist',
           required: true
         }
       ]
     },
     {
-      type: 'SUB_COMMAND',
+      type: 1,
       description: 'user to remove from blacklist',
       name: 'remove-user',
       options: [
         {
           name: 'user',
-          type: 'USER',
+          type: 6,
           description: 'user to blacklist',
           required: true
         }
@@ -47,29 +47,29 @@ module.exports = {
     {
       name: 'panel',
       description: 'panel of blacklisted users',
-      type: 'SUB_COMMAND'
+      type: 1
     },
     {
-      type: 'SUB_COMMAND',
+      type: 1,
       description: 'Add a guild to blacklist',
       name: 'add-guild',
       options: [
         {
           name: 'guild',
-          type: 'STRING',
+          type: 3,
           description: 'guild to add to blacklist',
           required: true
         }
       ]
     },
     {
-      type: 'SUB_COMMAND',
+      type: 1,
       description: 'remove a guild from blacklist',
       name: 'remove-guild',
       options: [
         {
           name: 'guild',
-          type: 'STRING',
+          type: 3,
           description: 'guild to blacklist',
           required: true
         }
@@ -135,11 +135,11 @@ try {
       }
 
       const embeds = [
-        new MessageEmbed().setTitle('Please select a member below')
+        new EmbedBuilder().setTitle('Please select a member below')
       ]
       const components = [
-        new MessageActionRow().addComponents(
-          new MessageSelectMenu()
+        new ActionRowBuilder().addComponents(
+          new SelectMenuBuilder()
             .setCustomId('b-panel')
             .setMaxValues(1)
             .addOptions(opt)
@@ -181,7 +181,7 @@ try {
       } else return interaction.editReply(`${bot.error} • Invalid Guild`);
     }
   } catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

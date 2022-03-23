@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require('discord.js')
+const { CommandInteraction, EmbedBuilder } = require('discord.js')
 const guilds = require('../../models/guild')
 
 module.exports = {
@@ -16,18 +16,18 @@ module.exports = {
 	options: [
 		{
 			name: 'add',
-			type: 'SUB_COMMAND',
+			type: 1,
 			description: 'Add a role upon leveling',
 			options: [
 				{
 					name: 'role',
-					type: 'ROLE',
+					type: 7,
 					description: 'Role to add upon leveling up',
 					required: true
 				},
 				{
 					name: 'level',
-					type: 'INTEGER',
+					type: 4,
 					description: 'Level to add role upon leveling up',
 					required: true
 				}
@@ -35,18 +35,18 @@ module.exports = {
 		},
 		{
 			name: 'remove',
-			type: 'SUB_COMMAND',
+			type: 1,
 			description: 'Removes an auto role to leveling database',
 			options: [
 				{
 					name: 'role',
-					type: 'ROLE',
+					type: 7,
 					description: 'Remove role from leveling database',
 					required: true
 				},
 				{
 					name: 'level',
-					type: 'INTEGER',
+					type: 4,
 					description: 'Remove level from leveling database',
 					required: true
 				}
@@ -54,7 +54,7 @@ module.exports = {
 		},
 		{
 			name: 'list',
-			type: 'SUB_COMMAND',
+			type: 1,
 			description: 'Shows a list of leveling auto role system'
 		}
 	],
@@ -66,6 +66,9 @@ module.exports = {
 	 */
 	run: async (bot, interaction, args) => {
 		let [sub] = args
+
+try {
+    
 		const guild = await guilds.findOne({ guildId: interaction.guild.id })
 
 		if (sub === 'add') {
@@ -155,12 +158,36 @@ module.exports = {
 				roles.push(`${role} • \`${r.level}\``)
 			})
 
-			const embed = new MessageEmbed()
+			const embed = new EmbedBuilder()
 				.setAuthor(`Automatic Level Roles`)
 				.setDescription(roles.join('\n'))
 				.setColor(bot.color)
 
 			return await interaction.editReply({ embeds: [embed] })
 		}
+
+    } catch (e) {
+			let emed = new EmbedBuilder()
+				.setTitle(`${bot.error} • Error Occured`)
+				.setDescription(`\`\`\`${e.stack}\`\`\``)
+				.setColor(bot.color)
+
+			bot.sendhook(null, {
+				channel: bot.err_chnl,
+				embed: emed
+			})
+
+			interaction.followUp({
+				embeds: [
+					{
+						description: `${
+							bot.error
+						} Error, try again later \n Error: ${e} \n [Contact Support](https://comfibot.tk/discord) `,
+						color: bot.color
+					}
+				]
+			})
+}
+    
 	}
 }

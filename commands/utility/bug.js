@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require('discord.js')
+const { CommandInteraction, EmbedBuilder } = require('discord.js')
 
 module.exports = {
 	name: 'bugreport',
@@ -14,7 +14,7 @@ module.exports = {
 	ownerOnly: false,
 	options: [
 		{
-			type: 'STRING',
+			type: 3,
 			description: 'The bug',
 			name: 'bug',
 			required: true
@@ -28,6 +28,9 @@ module.exports = {
 	 * @param {String[]} args
 	 */
 	run: async (bot, interaction, args, message) => {
+
+try {
+    
 		const member = interaction.member
 		const reportCh = bot.channels.cache.get(
 			'889149873893539900' || '863684464176922664'
@@ -39,7 +42,7 @@ module.exports = {
 			.slice(0, 2000)
 			.join('')
 		if (!query) return interaction.followUp({ content: 'Specify a **bug**' })
-		const reportEmbed = new MessageEmbed()
+		const reportEmbed = new EmbedBuilder()
 			.setTitle('Bug Report')
 			.setDescription(
 				`**Author :**\n> ${member.user.username} \n**Report :**\n> ${query}`
@@ -61,5 +64,30 @@ module.exports = {
 		if (reportCh) {
 			reportCh.send({ embeds: [reportEmbed] }).catch(() => null)
 		} else return
+
+    } catch (e) {
+			let emed = new EmbedBuilder()
+				.setTitle(`${bot.error} • Error Occured`)
+				.setDescription(`\`\`\`${e.stack}\`\`\``)
+				.setColor(bot.color)
+
+			bot.sendhook(null, {
+				channel: bot.err_chnl,
+				embed: emed
+			})
+
+			interaction.followUp({
+				embeds: [
+					{
+						description: `${
+							bot.error
+						} Error, try again later \n Error: ${e} \n [Contact Support](https://comfibot.tk/discord) `,
+						color: bot.color
+					}
+				]
+			})
+                     }
+  
 	}
+   
 }

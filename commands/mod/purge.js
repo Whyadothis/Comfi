@@ -10,11 +10,11 @@ module.exports = {
         {
             name: "messages",
             description: "Purge messages in this channel.",
-            type: `SUB_COMMAND`,
+            type: 1,
             options: [
                 {
                     name: "number",
-                    type: `INTEGER`,
+                    type: 4,
                     description: "Number of messages to purge",
                     required: true
                 }
@@ -23,16 +23,16 @@ module.exports = {
         {
             name: "bot-messages",
             description: "Purge all messages sent by bots in this channel",
-            type: `SUB_COMMAND`
+            type: 1
         },
         {
             name: "links",
             description: "Purge messages which contain links",
-            type: `SUB_COMMAND`,
+            type: 1,
             options: [
                 {
                     name: "number",
-                    type: `INTEGER`,
+                    type: 4,
                     description: "Number of messages to purge",
                     required: true
                 }
@@ -41,11 +41,11 @@ module.exports = {
         {
             name: "emojis",
             description: "Purge messages which contain emojis",
-            type: `SUB_COMMAND`,
+            type: 1,
             options: [
                 {
                     name: "number",
-                    type: `INTEGER`,
+                    type: 4,
                     description: "Number of messages to purge",
                     required: true
                 }
@@ -54,11 +54,11 @@ module.exports = {
         {
             name: "attachments",
             description: "Purge messages which contain attachments",
-            type: `SUB_COMMAND`,
+            type: 1,
             options: [
                 {
                     name: "number",
-                    type: `INTEGER`,
+                    type: 4,
                     description: "Number of messages to purge",
                     required: true
                 }
@@ -67,17 +67,17 @@ module.exports = {
         {
             name: "user",
             description: "Purge messages of a specific user",
-            type: `SUB_COMMAND`,
+            type: 1,
             options: [
                 {
                     name: "number",
-                    type: `INTEGER`,
+                    type: 4,
                     description: "Number of messages to purge",
                     required: true
                 },
                 {
                     name: "user",
-                    type: `USER`,
+                    type: 6,
                     description: "The user whose messages you want to purge",
                     required: true
                 }
@@ -86,17 +86,17 @@ module.exports = {
         {
             name: "match",
             description: "Purge messages which match specified content in the channel",
-            type: `SUB_COMMAND`,
+            type: 1,
             options: [
                 {
                     name: "number",
-                    type: `INTEGER`,
+                    type: 4,
                     description: "Number of messages to purge",
                     required: true
                 },
                 {
                     name: "text",
-                    type: `STRING`,
+                    type: 3,
                     description: "The message content to match with.",
                     required: true
                 }
@@ -105,17 +105,17 @@ module.exports = {
         {
             name: "includes",
             description: "Purge messages which includes specified content in this channel",
-            type: `SUB_COMMAND`,
+            type: 1,
             options: [
                 {
                     name: "number",
-                    type: `INTEGER`,
+                    type: 4,
                     description: "Number of messages to purge",
                     required: true
                 },
                 {
                     name: "text",
-                    type: `STRING`,
+                    type: 3,
                     description: "The text to search",
                     required: true
                 }
@@ -124,17 +124,17 @@ module.exports = {
         {
             name: "starts-with",
             description: "Purge all messages which starts with specified text in this channel",
-            type: `SUB_COMMAND`,
+            type: 1,
             options: [
                 {
                     name: "number",
-                    type: `INTEGER`,
+                    type: 4,
                     description: "Number of messages to purge",
                     required: true
                 },
                 {
                     name: "text",
-                    type: `STRING`,
+                    type: 3,
                     description: "The text with which the messages start with.",
                     required: true
                 }
@@ -143,25 +143,25 @@ module.exports = {
         {
             name: "ends-with",
             description: "Purge all messages which ends with something",
-            type: `SUB_COMMAND`,
+            type: 1,
             options: [
                 {
                     name: "number",
-                    type: `INTEGER`,
+                    type: 4,
                     description: "Number of messages to purge",
                     required: true
                 },
                 {
                     name: "text",
-                    type: `STRING`,
+                    type: 3,
                     description: "The text with which the messages end with",
                     required: true
                 }
             ]
         },
     ],
-    botperm: "MANAGE_MESSAGES",
-    userperm: "MANAGE_MESSAGES",
+    botperm: ["MANAGE_MESSAGES"],
+    userperm: ["MANAGE_MESSAGES"],
     /**
      *
      * @param {CommandInteraction} interaction
@@ -207,7 +207,7 @@ if (s !== 'bot-messages' && messages <= 1) return await  bot.errorEmbed(bot, int
   
 const pur = await purger.purge(sus, interaction, interaction.channel, num, user || string)
 } catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

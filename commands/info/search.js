@@ -6,7 +6,7 @@
 */
 
 const { get } = require("request-promise-native");
-const { CommandInteraction, MessageEmbed } = require("discord.js");
+const { CommandInteraction, EmbedBuilder } = require("discord.js");
 
 module.exports = {
     name: "search",
@@ -15,11 +15,11 @@ module.exports = {
     options: [
     {      
       name: "anime",
-     type: "SUB_COMMAND",
+     type: 1,
      description: "Search for anime",
      options: [
        {
-            type: 'STRING',
+            type: 3,
             description: 'name of anime to search',
             name: 'name',
             required: true,
@@ -29,10 +29,10 @@ module.exports = {
       {
         name: "manga",
         description: "Search for manga",
-        type: "SUB_COMMAND",
+        type: 1,
         options: [
           {
-            type: "STRING",
+            type: 3,
             description: "Name of manga to search",
             name: "name",
             required: true
@@ -283,7 +283,7 @@ if (sub === "manga") {
 }
 
     } catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

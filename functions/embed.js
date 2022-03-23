@@ -7,10 +7,10 @@
 
 const Discord = require('discord.js')
 const {
-	MessageEmbed,
-	MessageActionRow,
-	MessageSelectMenu,
-	MessageButton
+	EmbedBuilder,
+	ActionRowBuilder,
+	SelectMenuBuilder,
+	ButtonBuilder
 } = require('discord.js')
 const bot = require('../index')
 
@@ -99,17 +99,17 @@ async function embed(message, options = []) {
 				menuOptions.push(dataopt)
 			}
 
-			let slct = new MessageSelectMenu()
+			let slct = new SelectMenuBuilder()
 				.setMaxValues(1)
 				.setCustomId('embed-creator')
 				.setPlaceholder('Embed Creation Options')
 				.addOptions([menuOptions])
 
-			const row = new MessageActionRow().addComponents([done, reject])
+			const row = new ActionRowBuilder().addComponents([done, reject])
 
-			const row2 = new MessageActionRow().addComponents([slct])
+			const row2 = new ActionRowBuilder().addComponents([slct])
 
-			const embed = new MessageEmbed()
+			const embed = new EmbedBuilder()
 				.setTitle(options.embedTitle || 'Embed Creator')
 				.setDescription(
 					'Select any ***option*** from the Select Menu in this message and i will **collect all informations and create a embed** for you using that data.\n\nThis is a completed embed.'
@@ -133,7 +133,7 @@ async function embed(message, options = []) {
 				})
 			}
 
-			const emb = new MessageEmbed().setFooter(foot).setColor('#2F3136')
+			const emb = new MessageEmbed().setFooter(foot).setColor(0x2F3136)
 
 			message.channel
 				.send({ content: '** **', embeds: [emb] })

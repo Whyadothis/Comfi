@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require('discord.js')
+const { CommandInteraction, EmbedBuilder, ChannelType } = require('discord.js')
 
 module.exports = {
 	name: 'vc-move',
@@ -14,17 +14,17 @@ module.exports = {
 	ownerOnly: false,
 	options: [
 		{
-			type: 'USER',
+			type: 6,
 			description: 'User to move',
 			name: 'user',
 			required: true
 		},
 		{
-			type: 'CHANNEL',
+			type: 7,
 			description: 'channel to move user to',
 			name: 'channel',
 			required: true,
-			channelTypes: ['GUILD_VOICE']
+			channelType: [ChannelType.Voice]
 		}
 	],
 	userperm: ['MOVE_MEMBERS'],
@@ -69,7 +69,7 @@ module.exports = {
 				`${bot.tick} • Moved ${member.user.username} to <#${channel.id}> !`
 			)
 		} catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

@@ -7,7 +7,7 @@
 
 const guilds = require('../../models/guild')
 const simplydjs = require('simply-djs')
-const { CommandInteraction, MessageEmbed } = require('discord.js')
+const { CommandInteraction, EmbedBuilder } = require('discord.js')
 
 module.exports = {
 	name: 'suggest',
@@ -16,7 +16,7 @@ module.exports = {
   directory: "utility",
 	options: [
 		{
-			type: 'STRING',
+			type: 3,
 			description: 'The Suggestion',
 			name: 'suggestion',
 			required: true
@@ -41,12 +41,12 @@ module.exports = {
 				simplydjs.suggestSystem(bot, interaction, suggestion, {
 					slash: true,
 					chid: `${channel}`,
-					embedColor: bot.color, // defaultL #075FFF
+					embedColor: bot.color, 
 					credit: false,
-					yesEmoji: `${bot.tick}`, // default: ☑️
-					yesColor: 'SECONDARY', // default: green
-					noEmoji: `${bot.crosss}`, // default: X
-					noColor: 'SECONDARY' // default: red
+					yesEmoji: `${bot.tick}`,
+					yesColor: 'SECONDARY', 
+					noEmoji: `${bot.crosss}`,
+					noColor: 'SECONDARY'
 				})
 			} else if (!guild.suggestions) {
 				interaction.editReply(
@@ -56,7 +56,7 @@ module.exports = {
 				)
 			}
 		} catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require('discord.js')
+const { CommandInteraction, ApplicationCommandOptionType, EmbedBuilder } = require('discord.js')
 
 module.exports = {
 	name: 'lockk',
@@ -16,12 +16,12 @@ module.exports = {
 	botperm: ['MANAGE_CHANNELS'],
 	options: [
 		{
-			type: 'SUB_COMMAND',
+			type: 1,
 			description: 'Lock a channel to prevent raid',
 			name: 'enable',
 			options: [
 				{
-					type: 'CHANNEL',
+					type: ApplicationCommandOptionType.Channel,
 					description: 'Channel to lock',
 					name: 'channel',
 					required: false,
@@ -30,12 +30,12 @@ module.exports = {
 			]
 		},
 		{
-			type: 'SUB_COMMAND',
+			type: 1,
 			description: 'Unlocks a channel',
 			name: 'disable',
 			options: [
 				{
-					type: 'CHANNEL',
+					type: 7,
 					description: 'Channel to Unlock',
 					name: 'channel',
 					channelTypes: ['GUILD_TEXT', 'GUILD_VOICE'],
@@ -64,7 +64,7 @@ module.exports = {
 						ADD_REACTIONS: false
 					})
 				})
-				let embed = new MessageEmbed()
+				let embed = new EmbedBuilder()
 					.setDescription(`${bot.tick} • **Successfully Locked ${channel}**`)
 					.setColor(bot.color)
 				await interaction.editReply({ embeds: [embed] }).catch(() => null)
@@ -72,7 +72,7 @@ module.exports = {
     }, 20000)   
     
     } catch (e) {
-				let emed = new MessageEmbed()
+				let emed = new EmbedBuilder()
 					.setTitle(`${bot.error} • Error Occured`)
 					.setDescription(`\`\`\`${e.stack}\`\`\``)
 					.setColor(bot.color)
@@ -107,7 +107,7 @@ module.exports = {
 					})
 				})
 
-				let embed = new MessageEmbed()
+				let embed = new EmbedBuilder()
 					.setDescription(`${bot.tick} • **Successfully Unlocked ${channel}**`)
 					.setColor(bot.color)
 				interaction.editReply({ embeds: [embed] }).catch(() => null)
@@ -115,7 +115,7 @@ module.exports = {
     }, 20000)
       
 			} catch (e) {
-				let emed = new MessageEmbed()
+				let emed = new EmbedBuilder()
 					.setTitle(`${bot.error} • Error Occured`)
 					.setDescription(`\`\`\`${e.stack}\`\`\``)
 					.setColor(bot.color)

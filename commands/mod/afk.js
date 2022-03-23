@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require('discord.js')
+const { CommandInteraction, EmbedBuilder } = require('discord.js')
 const users = require(`../../models/users`)
 module.exports = {
 	name: 'afk',
@@ -14,7 +14,7 @@ module.exports = {
 	ownerOnly: false,
 	options: [
 		{
-			type: 'STRING',
+			type: 3,
 			description: 'Reason for going AFK',
 			name: 'reason',
 			required: true
@@ -45,14 +45,14 @@ module.exports = {
 					}
 				)
 
-				const embed = new MessageEmbed()
+				const embed = new EmbedBuilder()
 					.setDescription(`You have been set to afk\n**Reason :** ${reason}`)
 					.setColor(bot.color)
-					.setAuthor(
+					.setAuthor({name: 
 						`${interaction.user.username}`,
-						interaction.user.avatarURL({ dynamic: true })
-					)
-					.setFooter('Type a message to remove your AFK')
+						iconURL: interaction.user.avatarURL({ dynamic: true })
+                     })
+					.setFooter({text: 'Type a message to remove your AFK' })
 
 				if (interaction.member.manageable)
 					interaction.member.setNickname(
@@ -62,7 +62,7 @@ module.exports = {
 				await interaction.editReply({ embeds: [embed] })
 			}, 1000)
 		} catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

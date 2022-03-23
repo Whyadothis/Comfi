@@ -1471,7 +1471,7 @@ if (!reg.match(newData)) return {error: "Submit a Valid Image Url"}
     assistantsSecureStrorageKey: "Comfi",
     acceptPrivacyPolicy: true,
     reportError: (where, what) => {
-      bot.logger.log(`Discord Dashboard Error - ${where}: ${what} `)
+      bot.logger.log(`Discord Dashboard Error - ${where}: ${what.stack} `)
 }
   });
 

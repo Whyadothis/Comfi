@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require("discord.js");
+const { CommandInteraction, EmbedBuilder,  ApplicationCommandOptionType } = require("discord.js");
 
 module.exports = {
     name: "clever",
@@ -14,7 +14,7 @@ module.exports = {
     ownerOnly: false,
     options: [
         {
-            type: 'USER',
+            type: ApplicationCommandOptionType.User,
             description: 'The user',
             name: 'user',
             required: false,
@@ -31,7 +31,7 @@ try {
 
         let rng = Math.floor(Math.random() * 101);
 
-        const cleverembed = new MessageEmbed()
+        const cleverembed = new EmbedBuilder()
 
             .setTitle("CLEVER Rate 💡")
 
@@ -48,7 +48,7 @@ try {
         await interaction.followUp({ embeds: [cleverembed] });
 
 } catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

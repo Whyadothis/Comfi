@@ -7,7 +7,7 @@
 
 const warnSchema = require('../../models/users');
 const uuid = require('uuid');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
 	    name: 'warn',
@@ -21,18 +21,18 @@ module.exports = {
 				{
 					name: 'add',
 					description: 'Warn a user!',
-					type: 'SUB_COMMAND',
+					type: 1,
 					options: [
 						{
 							name: 'user',
 							description: 'Provide a user to warn them!',
-							type: 'USER',
+							type: 6,
 							required: true,
 						},
 						{
 							name: 'reason',
 							description: 'Provide a reason!',
-							type: 'STRING',
+							type: 3,
 							required: true,
 						},
 					],
@@ -40,12 +40,12 @@ module.exports = {
 				{
 					name: 'list',
 					description: 'Get a list of the warned user!',
-					type: 'SUB_COMMAND',
+					type: 1,
 					options: [
 						{
 							name: 'user',
 							description: "Provide a user to get it's list",
-							type: 'USER',
+							type: 6,
 							required: true,
 						},
 					],
@@ -53,24 +53,24 @@ module.exports = {
 				{
 					name: 'remove',
 					description: 'Remove a warned user!',
-					type: 'SUB_COMMAND',
+					type: 1,
 					options: [
 						{
 							name: 'warnid',
 							description: 'Provide a warnID to remove the warned user!',
-							type: 'STRING',
+							type: 3,
 							required: true,
 						},
 						{
 							name: 'user',
 							description: 'Provide a user to remove the warning!',
-							type: 'USER',
+							type: 6,
 							required: true,
 						},
 						{
 							name: 'reason',
 							description: 'Provide a us reason!',
-							type: 'STRING',
+							type: 6,
 							required: false,
 						}
 					],
@@ -114,13 +114,13 @@ try {
 				const warnCount = warnAddData ? warnAddData.warns.length + 1 : 1;
 				const warnGrammar = warnCount === 1 ? '' : 's';
 
-let warn = new MessageEmbed()
+let warn = new EmbedBuilder()
         .setTitle(`__Warned__`)    
         .setDescription(`You have been warned by ${interaction.user} \nReason: ${getReason}`)
             .setColor(bot.color);
         user.send({embeds: [ warn ]})
             .catch(() => null)
-            let warnEmbed = new MessageEmbed()
+            let warnEmbed = new EmbedBuilder()
             .setTitle("**__Warn Report__**")
             .setDescription(`${bot.tick} • Warned **${user.tag}** \n${bot.tick} • They now have **${warnCount}** warning${warnGrammar} \n${bot.tick} • Reason: ${getReason}`)
             .setColor(bot.color);
@@ -146,7 +146,7 @@ await bot.modlog({ Member: user.member,
 					});
 
 				let string = '';
-				const embed = new MessageEmbed()
+				const embed = new EmbedBuilder()
 					.setColor(bot.color)
 					.setDescription(string);
 
@@ -192,7 +192,7 @@ await bot.modlog({ Member: user.member,
 						: 0;
 					const warnedRemoveGrammar = warnedRemoveCount === 1 ? '' : 's';
 
-let warnEmbed = new MessageEmbed()
+let warnEmbed = new EmbedBuilder()
             .setTitle("**__Warn Report__**")
             .setDescription(`Successfully deleted **${getRemovedWarnedUser.user.tag}** warning, they now have **${warnedRemoveCount}** warning${warnedRemoveGrammar}!`)
            .setColor(bot.color)
@@ -211,7 +211,7 @@ await bot.modlog({ Member: getRemovedWarnedUser,
 				break;
 		}
 	} catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

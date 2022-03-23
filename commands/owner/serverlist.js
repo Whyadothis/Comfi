@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require("discord.js");
+const { CommandInteraction, EmbedBuilder } = require("discord.js");
 const simplydjs = require("simply-djs")
 
 module.exports = {
@@ -27,7 +27,7 @@ let pages = []
 
 guilds.forEach(guild => {
   
-const embed = new MessageEmbed() 
+const embed = new EmbedBuilder() 
         .setTitle(`Guilds for ${bot.user.username}`)
         .setColor(bot.color) 
   .setFooter(`Requested by ${interaction.user.tag}`) 

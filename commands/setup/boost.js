@@ -18,12 +18,12 @@ module.exports = {
     {
       name: 'toggle',
       description: 'Toggle the system on or off',
-      type: 'SUB_COMMAND',
+      type: 1,
       options: [
         {
           name: 'option',
           description: 'Options for boost Detector toggle',
-          type: 'STRING',
+          type: 3,
           required: true,
           choices: [
             {
@@ -41,10 +41,10 @@ module.exports = {
     {
       name: 'embed-toggle',
       description: 'Embed Toogle for boosy detector system',
-      type: 'SUB_COMMAND',
+      type: 1,
       options: [
         {
-          type: 'STRING',
+          type: 3,
           description: 'Options for boost detector embed toggle',
           name: 'options',
           required: true,
@@ -64,36 +64,36 @@ module.exports = {
     {
       name: 'channel',
       description: 'Channel for boost detector',
-      type: 'SUB_COMMAND',
+      type: 1,
       options: [
         {
           name: 'name',
-          type: 'CHANNEL',
+          type: 7,
           description: 'Channel for boost detector',
           required: true,
-          channelTypes: ['GUILD_TEXT']
+          channelTypes: [0]
         }
       ]
     },
     {
       name: 'embed',
       description: 'Setup embed for boost detector',
-      type: 'SUB_COMMAND'
+      type: 1
     },
     {
       name: 'content',
       description: 'Setup content for boost detector when embed toggle is off',
-      type: 'SUB_COMMAND',
+      type: 1,
       options: [
         {
           name: 'message',
-          type: 'STRING',
+          type: 3,
           description: 'Message for boost detector',
           required: true
         },
         {
           name: 'image',
-          type: 'STRING',
+          type: 3,
           description: 'Image url for boost detector',
           required: false
         }
@@ -101,8 +101,8 @@ module.exports = {
     },
     {
       name: "help",
-      description: "Help for leave Boost Detector",
-      type: "SUB_COMMAND"
+      description: "Help for Boost Detector",
+      type: 1
     },
   ],
   userperm: ['MANAGE_GUILD'],

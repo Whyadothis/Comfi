@@ -6,7 +6,7 @@
 */
 
 const guilds = require('../../models/guild');
-const { CommandInteraction, MessageEmbed } = require("discord.js");
+const { CommandInteraction, EmbedBuilder } = require("discord.js");
 
 module.exports = {
     name: "suggestion",
@@ -15,21 +15,21 @@ module.exports = {
    directory: "setting",
     options: [
       {
-      type: 'SUB_COMMAND',
+      type: 1,
       name: 'enable',
       description: 'Sets channel Suggestions',
       options: [
         {
-            type: 'CHANNEL',
+            type: 7,
             description: 'channel for suggestion',
             name: 'channel',
             required: true,
-            channelTypes: ["GUILD_TEXT"],
+            channelTypes: [0],
         },
     ],
         },
         {
-            type: 'SUB_COMMAND',
+            type: 1,
             name: 'disable',
             description: 'Disables the suggestion channel',
         },
@@ -75,7 +75,7 @@ return await bot.successEmbed(bot, interaction, `**Successfully Removed Suggesti
 }
     }
  catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require('discord.js')
+const { CommandInteraction, EmbedBuilder } = require('discord.js')
 const guilds = require('../../models/guild')
 
 module.exports = {
@@ -17,7 +17,7 @@ module.exports = {
 		{
 			name: 'nick',
 			description: 'nickname to set',
-			type: 'STRING',
+			type: 3,
 			required: true
 		}
 	],
@@ -43,7 +43,7 @@ const arg = interaction.options.getString("name")
 )	  
   }
     } catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

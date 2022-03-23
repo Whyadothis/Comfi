@@ -6,7 +6,7 @@
 */
 
 const urban = require('relevant-urban');
-const { CommandInteraction, MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
+const { CommandInteraction, EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require("discord.js");
 
 module.exports = {
     name: "urbandictionary",
@@ -14,7 +14,7 @@ module.exports = {
     ownerOnly: false,
     options: [
         {
-            type: 'STRING',
+            type: 3,
             description: 'Word to Search',
             name: 'word',
             required: true,
@@ -36,9 +36,9 @@ module.exports = {
                 if (!res) return interaction.editReply("No results found for this topic, sorry!");
                 let { word, urbanURL, definition, example, thumbsUp, thumbsDown, author } = res;
 
-                let embed = new MessageEmbed()
+                let embed = new EmbedBuilder()
                     .setColor(bot.color)
-                    .setAuthor(`Word - ${word}`)
+                    .setAuthor({name:`Word - ${word}` })
                     .setThumbnail(image)
                     .setDescription(`**Defintion:**\n*${definition || "No definition"}*\n\n**Example:**\n*${example || "No Example"}*`)
                     .addField('**Rating:**', `**\`Upvotes: ${thumbsUp} | Downvotes: ${thumbsDown}\`**`)
@@ -46,9 +46,9 @@ module.exports = {
                     .addField("**Author:**", `${author || "unknown"}`)
                     .setTimestamp();
 
-      const row = new MessageActionRow().addComponents(
-        new MessageButton()
-          .setStyle('LINK')
+      const row = new ActionRowBuilder().addComponents(
+        new ButtonBuilder()
+          .setStyle(6)
           .setURL(`${urbanURL}`)
           .setLabel(`Link to ${word}`)
       )
@@ -56,7 +56,7 @@ module.exports = {
                 await interaction.editReply({embeds: [ embed ],  components:  [row]})
             
         } catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

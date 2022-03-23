@@ -6,7 +6,7 @@
 */
 
 const guilds = require('../../models/guild');
-const { CommandInteraction, MessageEmbed } = require("discord.js");
+const { CommandInteraction, EmbedBuilder } = require("discord.js");
 
 module.exports = {
   name: "antiscam",
@@ -14,12 +14,12 @@ module.exports = {
   ownerOnly: false,
   directory: "setting",
   options: [{
-    type: 'SUB_COMMAND',
+    type: 1,
     description: 'Sets the antiscam toggle true/false',
     name: 'toggle',
     options: [{
-      type: 'STRING',
-      description: 'Toggle chatbot',
+      type: 3,
+      description: 'Toggle antiscam system',
       name: 'option',
       required: true,
       choices: [
@@ -36,12 +36,12 @@ module.exports = {
     ],
   },
   {
-    type: 'SUB_COMMAND',
+    type: 1,
     description: 'Sets the duration for antiscam timeout',
     name: 'duration',
     options: [
       {
-        type: 'STRING',
+        type: 3,
         description: 'time for timeout, default 12hrs',
         name: 'time',
         required: true,
@@ -49,7 +49,7 @@ module.exports = {
     ],
   },
   {
-    type: 'SUB_COMMAND',
+    type: 1,
     description: 'Disables the antiscam system',
     name: 'disable',
   },
@@ -122,7 +122,7 @@ module.exports = {
       }
     }
   } catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

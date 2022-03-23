@@ -6,7 +6,7 @@
 */
 
 const sourcebin = require('sourcebin_js'),
-	{ MessageEmbed, MessageButton, MessageActionRow } = require('discord.js')
+	{ EmbedBuilder, ButtonBuilder, ActionRowBuilde } = require('discord.js')
 
 module.exports = {
 	name: 'sourcebin',
@@ -14,13 +14,13 @@ module.exports = {
   directory: "utility",
 	options: [
 		{
-			type: 'STRING',
+			type: 3,
 			name: 'title',
 			description: 'What is the title of your code?',
 			required: true
 		},
 		{
-			type: 'STRING',
+			type: 3,
 			name: 'language',
 			description: 'What is the language of your code?',
 			required: true,
@@ -64,7 +64,7 @@ module.exports = {
 			]
 		},
 		{
-			type: 'STRING',
+			type: 3,
 			name: 'code',
 			description: "What's the code?",
 			required: true
@@ -82,6 +82,9 @@ module.exports = {
 		const Content = interaction.options.getString('code')
 		const Title = interaction.options.getString('title')
 		const language = interaction.options.getString('language')
+
+try {
+    
 		sourcebin
 			.create(
 				[
@@ -94,14 +97,14 @@ module.exports = {
 				{ title: Title }
 			)
 			.then(src => {
-				let embed = new MessageEmbed()
+				let embed = new EmbedBuilder()
 					.setTitle(`Comfi™ Sourcebin`)
 					.setColor(bot.color)
 					.setDescription(`Code:\n\`\`\`js\n${Content}\n\`\`\``)
 
-				const row = new MessageActionRow().addComponents(
-					new MessageButton()
-						.setStyle('LINK')
+				const row = new ActionRowBuilder().addComponents(
+					new ButtonBuilder()
+						.setStyle(5)
 						.setURL(`${src.url}`)
 						.setLabel('Bin Url!')
 				)
@@ -111,27 +114,27 @@ module.exports = {
 					embeds: [embed]
 				})
 			})
-			.catch(e => {
-				let emed = new MessageEmbed()
-					.setTitle(`${bot.error} • Error Occured`)
-					.setDescription(`\`\`\`${e.stack}\`\`\``)
-					.setColor(bot.color)
+    } catch (e) {
+			let emed = new EmbedBuilder()
+				.setTitle(`${bot.error} • Error Occured`)
+				.setDescription(`\`\`\`${e.stack}\`\`\``)
+				.setColor(bot.color)
 
-				bot.sendhook(null, {
-					channel: bot.err_chnl,
-					embed: emed
-				})
-
-				interaction.followUp({
-					embeds: [
-						{
-							description: `${
-								bot.error
-							} Error, try again later \n Error: ${e} \n [Contact Support](https://comfibot.tk/discord) `,
-							color: bot.color
-						}
-					]
-				})
+			bot.sendhook(null, {
+				channel: bot.err_chnl,
+				embed: emed
 			})
+
+			interaction.followUp({
+				embeds: [
+					{
+						description: `${
+							bot.error
+						} Error, try again later \n Error: ${e} \n [Contact Support](https://comfibot.tk/discord) `,
+						color: bot.color
+					}
+				]
+			})
+    }
 	}
 }

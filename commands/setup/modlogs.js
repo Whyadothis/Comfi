@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require('discord.js')
+const { CommandInteraction, EmbedBuilder } = require('discord.js')
 const guilds = require('../../models/guild')
 
 module.exports = {
@@ -15,21 +15,21 @@ module.exports = {
 	ownerOnly: false,
 	options: [
 		{
-			type: 'SUB_COMMAND',
+			type: 1,
 			name: 'enable',
 			description: 'Sets channel for Modlogs',
 			options: [
 				{
-					type: 'CHANNEL',
+					type: 7,
 					description: 'modlogs channel',
 					name: 'name',
 					required: true,
-					channelTypes: ['GUILD_TEXT']
+					channelTypes: [0]
 				}
 			]
 		},
 		{
-			type: 'SUB_COMMAND',
+			type: 1,
 			name: 'disable',
 			description: 'Disables the modlogs channel'
 		}
@@ -71,7 +71,7 @@ module.exports = {
 					}\`!**`
 				)
 			} catch (e) {
-				let emed = new MessageEmbed()
+				let emed = new EmbedBuilder()
 					.setTitle(`${bot.error} • Error Occured`)
 					.setDescription(`\`\`\`${e.stack}\`\`\``)
 					.setColor(bot.color)
@@ -116,7 +116,7 @@ module.exports = {
 					}\`**`
 				)
 			} catch (e) {
-				let emed = new MessageEmbed()
+				let emed = new EmbedBuilder()
 					.setTitle(`${bot.error} • Error Occured`)
 					.setDescription(`\`\`\`${e.stack}\`\`\``)
 					.setColor(bot.color)

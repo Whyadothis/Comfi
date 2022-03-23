@@ -1,9 +1,11 @@
 const {
 	CommandInteraction,
-	MessageEmbed,
-	MessageButton,
-	MessageActionRow,
-  MessageAttachment
+	EmbedBuilder,
+	ButtonBuilder,
+	ActionRowBuilder,
+  Attachment,
+  ChannelType,
+  ApplicationCommandOptionType
 } = require('discord.js')
 const axios = require('axios')
 const { version } = require('../../package.json')
@@ -22,28 +24,28 @@ module.exports = {
 		{
 			name: 'banner',
 			description: 'Get the banner of the specified member',
-			type: 'SUB_COMMAND',
+			type: ApplicationCommandOptionType.Subcommand,
 			options: [
 				{
 					name: 'member',
 					description: 'Input member to get banner',
-					type: 'USER',
+					type: ApplicationCommandOptionType.User,
 					required: true
 				}
 			]
 		},
 		{
-			type: 'SUB_COMMAND',
+			type: 1,
 			description: `Check\'s bot\'s status`,
 			name: 'bot'
 		},
 		{
-			type: 'SUB_COMMAND',
+			type: 1,
 			description: 'Information about the channel',
 			name: 'channel',
 			options: [
 				{
-					type: 'CHANNEL',
+					type: ApplicationCommandOptionType.Channel,
 					description: 'Channel to get info about',
 					name: 'name',
 					required: false
@@ -52,52 +54,52 @@ module.exports = {
 		},
 		{
 			name: 'sticker',
-			type: 'SUB_COMMAND',
+			type: 1,
 			description: 'Information about the sticker',
 			options: [
 				{
 					name: 'url',
-					type: 'STRING',
+					type: ApplicationCommandOptionType.String,
 					description: 'url of the sticker',
 					required: true
 				}
 			]
 		},
 		{
-			type: 'SUB_COMMAND',
+			type: 1,
 			description: 'Information about server membercount',
 			name: 'membercount'
 		},
 		{
-			type: 'SUB_COMMAND',
+			type: 1,
 			description: 'Information about the bot privacy policy',
 			name: 'privacy'
 		},
 		{
-			type: 'SUB_COMMAND',
+			type: 1,
 			description: 'Information about the role',
 			name: 'role',
 			options: [
 				{
 					name: 'role',
 					description: 'The role you want information about',
-					type: 'ROLE',
+					type: ApplicationCommandOptionType.Role,
 					required: true
 				}
 			]
 		},
 		{
-			type: 'SUB_COMMAND',
+			type: 1,
 			description: 'Information about the server',
 			name: 'server'
 		},
 		{
-			type: 'SUB_COMMAND',
+			type: 1,
 			description: 'Information about the user',
 			name: 'user',
 			options: [
 				{
-					type: 'USER',
+					type: ApplicationCommandOptionType.User,
 					name: 'user',
 					description:
 						"The specified user you'd like to retrieve information for.",
@@ -135,7 +137,7 @@ module.exports = {
 								user.id
 							}/${banner}${extension}?size=2048`
 
-							const embed = new MessageEmbed()
+							const embed = new EmbedBuilder()
 								.setTitle(`${user.tag}'s Banner`)
 								.setImage(`${url}`)
 								.setColor(accent_color || bot.color)
@@ -143,7 +145,7 @@ module.exports = {
 							await interaction.followUp({ embeds: [embed] })
 						} else {
 							if (accent_color) {
-								const embed = new MessageEmbed()
+								const embed = new EmbedBuilder()
 									.setDescription(
 										`**${
 											user.tag
@@ -164,29 +166,28 @@ module.exports = {
 			}
 
 			if (subcommand === 'bot') {
-				let embed = new MessageEmbed()
+				let embed = new EmbedBuilder()
 					.setColor(bot.color)
 					.setAuthor({
 						name: `${bot.user.username}™ Information`,
 						iconURL: bot.user.displayAvatarURL({ dynamic: true })
                      })
 					.setThumbnail(bot.user.displayAvatarURL({ dynamic: true }))
-					.addField('↠ Made with love by', '꒰⚘݄꒱₊_❝ moonbow  ᵕ̈ 🌸#5817', true)
-					.addField('↠ You can find me on', `${bot.guilds.cache.size} guilds`, true)
-					.addField(
-						`↠ I am watching over`,
-						`${bot.guilds.cache.reduce(
+					.addField({name: '↠ Made with love by', value: '꒰⚘݄꒱₊_❝ moonbow  ᵕ̈ 🌸#5817', inline: true},
+                    {name: '↠ You can find me on', value: `${bot.guilds.cache.size} guilds`, inline: true},
+                    {name: `↠ I am watching over`,
+						value: `${bot.guilds.cache.reduce(
 							(users, value) => users + value.memberCount,
 							0
 						)} users`,
-						true
-					)
-					.addField(
-						'↠ I have a total of',
-						`${bot.slashCommands.size} commands`,
-						true
-					)
-         // .addField('↠ Please Consider donating', 'to support comfi development and hosting', true);         
+						inline: true
+					},
+                    {
+						name: '↠ I have a total of',
+						value: `${bot.slashCommands.size} commands`,
+						inline: true
+                    },
+                    {name: '↠ Please Consider donating', value: 'to support comfi development and hosting', inline: true});         
 				await interaction.followUp({ embeds: [embed] })
 			}
 
@@ -197,27 +198,27 @@ module.exports = {
 				if (!channel) return interaction.editReply(`${bot.error} • **Channel Not Found!**`)
   const rte = secondsToHms(channel.rateLimitPerUser)
 
-				let embed = new MessageEmbed()
+				let embed = new EmbedBuilder()
 					.setTitle(`✧ Channel Information for **${channel.name}**`)
 					.setThumbnail(interaction.guild.iconURL({ dynamic: true }))
-					.addField('↦ **Name**', ` \`\`\`\ ${channel.name} \`\`\`\ `, true)
-					.addField('↦ **Parent**', ` \`\`\`\ ${channel.parent ? channel.parent.name : "Parent Not Found"} \`\`\`\ `, true)
-					.addField('↦ **NSFW**', ` \`\`\`\ ${channel.nsfw} \`\`\`\ `, true)
-					.addField('↦ **Channel ID**', ` \`\`\`\ ${channel.id} \`\`\`\ `)
-					.addField('↦ **Channel Type**', ` \`\`\`\ ${channel.type} \`\`\`\ `)
-					.addField(
+					.addField({name: '↦ **Name**', value: ` \`\`\`\ ${channel.name} \`\`\`\ `, inline: true },
+					{name: '↦ **Parent**', value:` \`\`\`\ ${channel.parent ? channel.parent.name : "Parent Not Found"} \`\`\`\ `, inline: true },
+					{name: '↦ **NSFW**', value:` \`\`\`\ ${channel.nsfw} \`\`\`\ `, inline: true },
+					{name: '↦ **Channel ID**', value: ` \`\`\`\ ${channel.id} \`\`\`\ `, inline: true },
+					{name: '↦ **Channel Type**', value:  ` \`\`\`\ ${channel.type} \`\`\`\ `, inline: true},
+					{ name: 
 						'↦ **Channel Threads**',
-						` \`\`\`\ ${channel.threads ? channel.threads.cache.size.toString() : 'No Threads'} \`\`\`\ `
-		)					
-					.addField('↦ **Slowmode**', ` \`\`\`\ ${rte} \`\`\`\ `, true)
-					.addField(
+						value: ` \`\`\`\ ${channel.threads ? channel.threads.cache.size.toString() : 'No Threads'} \`\`\`\ `, inline: true
+		 },			
+					{name: '↦ **Slowmode**', value: ` \`\`\`\ ${rte} \`\`\`\ `, inline: true },
+					{name: 
 						'↦ **Channel Description**',
-						` \`\`\`\ ${channel.topic || 'No Description'} \`\`\`\ `
-					)
-					.addField(
-						'↦ **Channel Created At**',
-						` \`\`\`\ ${channel.createdAt} \`\`\`\ `
-					)
+						value: ` \`\`\`\ ${channel.topic || 'No Description'} \`\`\`\ `, inline: true
+					 },
+					{
+						name: '↦ **Channel Created At**',
+						value: ` \`\`\`\ ${channel.createdAt} \`\`\`\ `,
+					inline: true })
 					.setColor(bot.color)
 				await interaction.editReply({ embeds: [embed] })
 			}
@@ -227,7 +228,7 @@ if (subcommand === 'membercount') {
         const member = memb.filter(x => x.user.bot === false).size
         const bot = memb.filter(x => x.user.bot === true).size
 
-  const Embed = new MessageEmbed()
+  const Embed = new EmbedBuilder()
 .setTitle(`${interaction.guild.name} • Member Count`)			
 .setThumbnail(
   interaction.guild.iconURL()
@@ -251,7 +252,7 @@ if (subcommand === 'membercount') {
 				let stickeName = sticker.name
 				// let uploader = sticker.fetchUser();
 
-				let embed = new MessageEmbed()
+				let embed = new EmbedBuilder()
 					.setAuthor(
 						`Sticker Info`,
 						interaction.user.displayAvatarURL({ dynamic: true })
@@ -303,13 +304,14 @@ if (subcommand === 'membercount') {
 					.slice(1)
 					.join('')
 
-				const embed = new MessageEmbed()
+				const embed = new EmbedBuilder()
 					.setColor(role.color)
 					.setThumbnail(`https://singlecolorimage.com/get/${hex}/400x400`)
 					.addFields(
 						{
 							name: '↝Mention & ID',
-							value: `${role} • \`${role.id}\``
+							value: `${role} • \`${role.id}\``,
+              inline: true
 						},
 						{
 							name: '↝Name',
@@ -323,7 +325,8 @@ if (subcommand === 'membercount') {
 						},
 						{
 							name: '↝Position',
-							value: `${role.position}`
+							value: `${role.position}`,
+              inline: true
 						},
 						{
 							name: `↝Hoisted`,
@@ -346,7 +349,7 @@ if (subcommand === 'membercount') {
  const emoji = await interaction.guild.emojis.fetch()
  const sticker = await interaction.guild.stickers.fetch()
   
- const embed = new MessageEmbed()
+ const embed = new EmbedBuilder()
  .setAuthor({name: interaction.guild.name, iconURL: interaction.guild.iconURL({dynamic: true})})
  .setColor(bot.color).setTitle(`**Server Information**`)
  .setThumbnail(interaction.guild.iconURL({dynamic: true}))
@@ -365,7 +368,7 @@ if (subcommand === 'membercount') {
  {
  name: "↣ Channels",
  value:
- `\n└➤ **Text**: ${channel.filter((c) => c.type === "GUILD_TEXT").size}\n└➤ **Voice**: ${channel.filter((c) => c.type === "GUILD_VOICE").size}\n└➤ **Threads**: ${channel.filter((c) => c.isThread && c.type === "GUILD_NEWS_THREAD" && "GUILD_PRIVATE_THREAD" && "PUILD_PUBLIC_THREAD").size}\n└➤ **Categories**: ${channel.filter((c) => c.type === "GUILD_CATEGORY").size}\n└➤ **Stages**: ${channel.filter((c) => c.type === "GUILD_STAGE_VOICE").size}\n\n└➤ **Total**: ${channel.size}`,
+ `\n└➤ **Text**: ${channel.filter((c) => c.type === ChannelType.GuildText).size}\n└➤ **Voice**: ${channel.filter((c) => c.type === ChannelType.GuildVoice).size}\n└➤ **Threads**: ${channel.filter((c) => c.isThread && c.type === ChannelType.GuildNewsThread && ChannelType.GuildPublicThread && ChannelType.GuildPrivateThread).size}\n└➤ **Categories**: ${channel.filter((c) => c.type === ChannelType.GuildCategory).size}\n└➤ **Stages**: ${channel.filter((c) => c.type === ChannelType.GuildStageVoice).size}\n\n└➤ **Total**: ${channel.size}`,
  inline: true
  },
  {
@@ -379,7 +382,7 @@ if (subcommand === 'membercount') {
  {
  name: "↣ Boost Information",
  value: 
- `\n└➤ **Tier**: ${interaction.guild.premiumTier.replace("TIER_", "")}\n└➤ **Boosts**: ${interaction.guild.premiumSubscriptionCount}\n└➤ **Boosters**: ${member.filter((m) => m.premiumSince).size}`,
+ `\n└➤ **Tier**: ${interaction.guild.premiumTier.replace("Tier", "")}\n└➤ **Boosts**: ${interaction.guild.premiumSubscriptionCount}\n└➤ **Boosters**: ${member.filter((m) => m.premiumSince).size}`,
  inline: true
  });
         
@@ -388,17 +391,17 @@ if (interaction.guild.bannerURL()) {
 true })}`) 
 }
 
- 		const row = new MessageActionRow().addComponents(
-			new MessageButton()
+ 		const row = new ActionRowBuilder().addComponents(
+			new ButtonBuilder()
 			.setCustomId("role")
 			.setLabel("Roles")
-			.setStyle("SECONDARY")
+			.setStyle(2)
       .setEmoji("883017858446135307"),
 
-			new MessageButton()
+			new ButtonBuilder()
 			.setCustomId("features")
 			.setLabel("Features")
-			.setStyle("SECONDARY")
+			.setStyle(2)
       .setEmoji("883017898984103986"))
  
  const msg = await interaction.editReply({ embeds: [embed], components: [row] , fetchReply: true})
@@ -417,7 +420,7 @@ true })}`)
 
 		const collector = msg.createMessageComponentCollector({
 			filter,
-			componentType: 'BUTTON',
+			componentType: 'Button',
 		})
 
 		collector.on("collect", async (int) => {
@@ -434,7 +437,7 @@ true })}`)
    
   if (int.customId === "features") {
 				await int.deferUpdate()
-				const gay1 = new MessageEmbed()
+				const gay1 = new EmbedBuilder()
 					.setTitle(`${interaction.guild.name}'s Features`)
 					.setDescription(`${feature ? `<a:p_arrowright4:884420650549272586> ` + feature.sort().join(`\n<a:p_arrowright4:884420650549272586> `) : "Features Not Available"}`)
 					.setColor(bot.color);
@@ -447,7 +450,7 @@ true })}`)
 
   if (int.customId === "role") {
 				await int.deferUpdate()
-				const gay1 = new MessageEmbed()
+				const gay1 = new EmbedBuilder()
 					.setTitle(`${interaction.guild.name}'s Roles`)
 					.setDescription(`${role ? `<a:p_arrowright4:884420650549272586> ` + role.join(`\n<a:p_arrowright4:884420650549272586> `) : "No Features Found"}`)
 					.setColor(bot.color);
@@ -464,16 +467,16 @@ true })}`)
 			}
 
 			if (subcommand === 'privacy') {
-				const embed = new MessageEmbed()
+				const embed = new EmbedBuilder()
 					.setTitle("Comfi Bot's Privacy Policy")
 					.setDescription(
 						" We do not store any data apart from the Commands Database and if the User Contact us from anywhere his data will be cleared, we do not store any type of personal data. We Follow all [Discord's Terms of Service](https://discord.com/terms) and [Community Guidelines](https://discord.com/guidelines)."
 					)
 					.setColor(bot.color)
 
-				const row = new MessageActionRow().addComponents(
-					new MessageButton()
-						.setStyle('LINK')
+				const row = new ActionRowBuilder().addComponents(
+					new ButtonBuilder()
+						.setStyle(5)
 						.setURL('https://comfibot.tk/privacy-policy')
 						.setLabel('Read More!')
 				)
@@ -542,17 +545,17 @@ true })}`)
 				"• Nitro";
 		}
 
-		const row = new MessageActionRow().addComponents(
-			new MessageButton()
+		const row = new ActionRowBuilder().addComponents(
+			new ButtonBuilder()
 			.setCustomId("banner")
 			.setLabel("Banner")
-			.setStyle("SECONDARY")
+			.setStyle(2)
       .setEmoji("883017858446135307"),
 
-			new MessageButton()
+			new ButtonBuilder()
 			.setCustomId("permissions")
 			.setLabel("Permissions")
-			.setStyle("SECONDARY")
+			.ssetStyle(2)
       .setEmoji("883017898984103986")
 		)
       
@@ -589,7 +592,7 @@ true })}`)
 					.displayAvatarURL({ dynamic: true })
 					.substr(user.displayAvatarURL({ dynamic: true }).length - 3)
 
-				let embed = new MessageEmbed()
+				let embed = new EmbedBuilder()
 					.setAuthor({name: user.tag, iconURL:  user.displayAvatarURL({ dynamic: true })})
 					.setThumbnail(user.avatarURL({ dynamic: true }))
 					.setDescription(
@@ -618,9 +621,9 @@ true })}`)
 
 				if (member) {
 					embed
-						.addField(
-							'Member information',
-							`**Joined server:** ${moment(member.joinedTimestamp).format(
+						.addFields({
+							name: 'Member information',
+							value: `**Joined server:** ${moment(member.joinedTimestamp).format(
 								'Do MMM YYYY'
 							)}\n**Nickname:** ${member.nickname ? member.nickname : 'None'}${
 								member.premiumSinceTimestamp
@@ -641,8 +644,8 @@ true })}`)
 										? trimArray(roles).join(', ')
 										: roles.join(', ')
 							}`,
-							false
-						)
+							inline: false
+						 })
 						.setFooter({text: `Join position: ${getOrdinal(await position)}`})
 						.setColor(bot.color)
 				}
@@ -666,7 +669,7 @@ true })}`)
 
 		const collector = msg.createMessageComponentCollector({
 			filter,
-			componentType: 'BUTTON',
+			componentType: 'Button',
 		})
 
 		collector.on("collect", async (int) => {
@@ -688,7 +691,7 @@ true })}`)
 							const extension = banner.startsWith("a_") ? ".gif" : ".png";
 							const url = `https://cdn.discordapp.com/banners/${member.id}/${banner}${extension}?size=2048`;
               
-							const embed = new MessageEmbed()
+							const embed = new EmbedBuilder()
 								.setTitle(`${member ? member.user.tag : user.tag}'s Banner`)
 								.setImage(`${url}`)
 								.setColor(accent_color ? accent_color : bot.color)
@@ -699,7 +702,7 @@ true })}`)
 							})
 						} else {
 if (accent_color) {
-								const embed = new MessageEmbed()
+								const embed = new EmbedBuilder()
 									.setDescription(
 										`**${
 											member ? member.user.tag : user.tag
@@ -739,7 +742,7 @@ if (accent_color) {
       
 			if (int.customId === "permissions") {
 				await int.deferUpdate()
-				const gay1 = new MessageEmbed()
+				const gay1 = new EmbedBuilder()
 					.setTitle(`${member ? member.user.tag : user.tag}'s Permissions`)
 					.setDescription(`${ `<a:p_arrowright4:884420650549272586> ` + permissions.join(`\n<a:p_arrowright4:884420650549272586> `)}`)
 					.setColor(bot.color);
@@ -754,7 +757,7 @@ if (accent_color) {
 			}
 
 		} catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

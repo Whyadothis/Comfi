@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require('discord.js')
+const { CommandInteraction, EmbedBuilder} = require('discord.js')
 
 module.exports = {
 	name: 'eval',
@@ -14,7 +14,7 @@ module.exports = {
 	ownerOnly: true,
 	options: [
 		{
-			type: 'STRING',
+			type: 3,
 			description: 'Code to evaluate',
 			name: 'code',
 			required: true
@@ -44,21 +44,21 @@ module.exports = {
 			await eval(toEval)
 			const evaluated = eval(toEval)
 
-			let embed = new MessageEmbed()
-				.setColor('#F4B3CA')
+			let embed = new EmbedBuilder()
+				.setColor(bot.color)
 				.setTimestamp()
-				.setFooter(bot.user.username)
+				.setFooter({text: bot.user.username })
 				.setTitle('Eval')
-				.addField(
-					'To Evaluate',
-					`\`\`\`js\n${args.join(' ')}\n\`\`\``
-				)
-				.addField('Evaluated:', `\`\`\`${evaluated || '??'}\`\`\``)
-				.addField('Type of:', `\`\`\`${typeof evaluated || '?'}\`\`\``)
+				.addFields({
+					name: 'To Evaluate',
+					value: `\`\`\`js\n${args.join(' ')}\n\`\`\``
+          },
+      {name: 'Evaluated:', value: `\`\`\`${evaluated || '??'}\`\`\``},
+      {name: 'Type of:', value: `\`\`\`${typeof evaluated || '?'}\`\`\``})
 
 			interaction.editReply({ embeds: [embed] })
 		} catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

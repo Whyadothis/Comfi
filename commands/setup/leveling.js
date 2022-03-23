@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed, MessageAttachment } = require('discord.js')
+const { CommandInteraction, EmbedBuilder } = require('discord.js')
 const guilds = require('../../models/guild')
 const embedCreate = require('../../functions/embed')
 
@@ -18,12 +18,12 @@ module.exports = {
     {
       name: 'toggle',
       description: 'Toggle the system on or off',
-      type: 'SUB_COMMAND',
+      type: 1,
       options: [
         {
           name: 'option',
           description: 'Options for leveling toggle',
-          type: 'STRING',
+          type: 3,
           required: true,
           choices: [
             {
@@ -41,10 +41,10 @@ module.exports = {
     {
       name: 'embed-toggle',
       description: 'Embed Toogle for leveling system',
-      type: 'SUB_COMMAND',
+      type: 1,
       options: [
         {
-          type: 'STRING',
+          type: 3,
           description: 'Options for leveling system embed toggle',
           name: 'options',
           required: true,
@@ -64,36 +64,36 @@ module.exports = {
     {
       name: 'channel',
       description: 'Channel for leveling system',
-      type: 'SUB_COMMAND',
+      type: 1,
       options: [
         {
           name: 'name',
-          type: 'CHANNEL',
+          type: 7,
           description: 'Channel for leveling system',
           required: true,
-          channelTypes: ['GUILD_TEXT']
+          channelTypes: [0]
         }
       ]
     },
     {
       name: 'embed',
       description: 'Setup embed for leveling system',
-      type: 'SUB_COMMAND'
+      type: 1
     },
     {
       name: 'content',
       description: 'Setup content when embedtoggle is off',
-      type: 'SUB_COMMAND',
+      type: 1,
       options: [
         {
           name: 'message',
-          type: 'STRING',
+          type: 3,
           description: 'Message for leveling system',
           required: true
         },
         {
           name: 'image',
-          type: 'STRING',
+          type: 11,
           description: 'Image url for leveling system',
           required: false
         }
@@ -102,7 +102,8 @@ module.exports = {
     {
       name: "help",
       description: "Variables for leveling system",
-      type: "SUB_COMMAND"
+      type: 1
+      
     },
   ],
   userperm: ['MANAGE_GUILD'],
@@ -189,7 +190,7 @@ module.exports = {
 
       if (sub === 'content') {
         let msg = interaction.options.getString('message')
-        let img = interaction.options.getString('image')
+        let img = interaction.options.getAttachment('image')
 
         await guilds.findOneAndUpdate(
           { guildId: interaction.guild.id },
@@ -214,7 +215,7 @@ module.exports = {
 
       if (sub === "help") {
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
           .setTitle(`Leveling System variables`, bot.user.displayAvatarURL())
           .setDescription(`Need Help setting Leveling system?`)
           .addFields(
@@ -234,7 +235,7 @@ module.exports = {
       }
 
     } catch (e) {
-      let emed = new MessageEmbed()
+      let emed = new EmbedBuilder()
         .setTitle(`${bot.error} • Error Occured`)
         .setDescription(`\`\`\`${e.stack}\`\`\``)
         .setColor(bot.color)

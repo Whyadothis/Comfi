@@ -6,7 +6,7 @@
 */
 
 const guilds = require('../../models/guild');  
-const { CommandInteraction, MessageEmbed } = require("discord.js"); 
+const { CommandInteraction, EmbedBuilder} = require("discord.js"); 
 
 module.exports = { 
   name: "chatbot", 
@@ -14,11 +14,11 @@ module.exports = {
   directory: "setting",
   ownerOnly: false, 
   options: [ { 
-    type: 'SUB_COMMAND', 
+    type: 1, 
     description: 'Sets the chatbot toggle true/false', 
     name: 'toggle', 
     options: [ { 
-      type: 'STRING', 
+      type: 3, 
       description: 'Toggle chatbot', 
       name: 'option', 
       required: true, 
@@ -36,21 +36,21 @@ module.exports = {
              ],
   }, 
       { 
-        type: 'SUB_COMMAND', 
+        type: 1, 
         description: 'Sets the channel for chatbot', 
         name: 'channel', 
         options : [ 
         { 
-          type: 'CHANNEL',
+          type: 7,
           description: 'Channel for Chatbot',
           name: 'name', 
           required: true,
-          channelTypes: ["GUILD_TEXT"],
+          channelTypes: [0],
         }, 
         ], 
       },
       { 
-        type: 'SUB_COMMAND', 
+        type: 1, 
         description: 'Disables the chatbot system',
         name: 'disable',
       }, 
@@ -68,6 +68,8 @@ run: async (bot, interaction, args) => {
 
     const guild = await guilds.findOne({guildId: interaction.guild.id})
   
+try {
+
   if (option === 'toggle') { 				const toggle = interaction.options.getString('option') 		
 
  if (guild.chatbot.toString() === toggle) {
@@ -115,4 +117,28 @@ if (guild.chat_channel === channel) {
         return await bot.successEmbed(bot, interaction, `**Disabled the Chatbot System in the server :)**`); 				
     }
   }
+
+        } catch (e) {
+			let emed = new EmbedBuilder()
+				.setTitle(`${bot.error} • Error Occured`)
+				.setDescription(`\`\`\`${e.stack}\`\`\``)
+				.setColor(bot.color)
+
+			bot.sendhook(null, {
+				channel: bot.err_chnl,
+				embed: emed
+			})
+
+			interaction.followUp({
+				embeds: [
+					{
+						description: `${
+							bot.error
+						} Error, try again later \n Error: ${e} \n [Contact Support](https://comfibot.tk/discord) `,
+						color: bot.color
+					}
+				]
+			})
+      }
+  
 }}

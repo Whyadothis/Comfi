@@ -4,7 +4,7 @@
 * This software is licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International 
 * For more information, see README.md and LICENSE 
 */
-
+const { ChannelType, EmbedBuilder } = require("discord.js")
 const simplydjs = require('simply-djs')
 
 module.exports = {
@@ -16,36 +16,36 @@ module.exports = {
 		{
 			name: 'add',
 			description: 'Add Reaction Role to Bot msg only',
-			type: 'SUB_COMMAND',
+			type: 1,
 			options: [
 				{
 					name: 'channel',
-					type: 'CHANNEL',
+					type: 7,
 					description: 'channel of that message',
 					required: true,
-					channelTypes: ['GUILD_TEXT']
+					channelTypes: [ ChannelType.GuildText ]
 				},
 				{
 					name: 'message',
-					type: 'STRING',
+					type: 3,
 					description: 'the message id',
 					required: true
 				},
 				{
 					name: 'role',
-					type: 'ROLE',
+					type: 8,
 					description: 'Role to Add',
 					required: true
 				},
 				{
 					name: 'label',
-					type: 'STRING',
+					type: 3,
 					description: 'name of the button ?',
 					required: false
 				},
 				{
 					name: 'style',
-					type: 'STRING',
+					type: 3,
 					description: 'color of the button',
 					required: false,
 					choices: [
@@ -69,7 +69,7 @@ module.exports = {
 				},
 				{
 					name: 'emoji',
-					type: 'STRING',
+					type: 3,
 					description: 'emoji for the button',
 					required: false
 				}
@@ -78,24 +78,24 @@ module.exports = {
 		{
 			name: 'remove',
 			description: 'Removes roles from a bot message',
-			type: 'SUB_COMMAND',
+			type: 1,
 			options: [
 				{
 					name: 'channel',
-					type: 'CHANNEL',
+					type: 7,
 					description: 'channel of that message',
 					required: true,
-					channelTypes: ['GUILD_TEXT']
+					channelTypes: [ 0 ]
 				},
 				{
 					name: 'message',
-					type: 'STRING',
+					type: 3,
 					description: 'the message id',
 					required: true
 				},
 				{
 					name: 'role',
-					type: 'ROLE',
+					type: 8,
 					description: 'Role to remove',
 					required: true
 				}
@@ -120,7 +120,7 @@ module.exports = {
 				})
 			}
 		} catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

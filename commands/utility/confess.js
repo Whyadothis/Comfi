@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require('discord.js')
+const { CommandInteraction, EmbedBuilder } = require('discord.js')
 const guilds = require('../../models/guild')
 
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
   ownerOnly: false,
   options: [
     {
-      type: 'STRING',
+      type: 3,
       description: 'Anonymous Confession',
       name: 'confession',
       required: true
@@ -44,7 +44,7 @@ module.exports = {
         if (!confessionQuery)
           return interaction.editReply(`${bot.error} • Please Confess Something.`)
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
 
           .setTitle('Anonymous Confession')
           .setDescription(`> ${confessionQuery}`)
@@ -60,7 +60,7 @@ module.exports = {
         )
       }
     } catch (e) {
-      let emed = new MessageEmbed()
+      let emed = new EmbedBuilder()
         .setTitle(`${bot.error} • Error Occured`)
         .setDescription(`\`\`\`${e.stack}\`\`\``)
         .setColor(bot.color)

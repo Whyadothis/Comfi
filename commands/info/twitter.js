@@ -6,7 +6,7 @@
 */
 
 const twitter = require('twitter-api.js');
-const { CommandInteraction, MessageEmbed } = require("discord.js");
+const { CommandInteraction, EmbedBuilder } = require("discord.js");
 
 module.exports = {
     name: "twitter",
@@ -14,7 +14,7 @@ module.exports = {
     ownerOnly: false,
     options: [
         {
-            type: 'STRING',
+            type: 3,
             description: 'Twitter username to search',
             name: 'username',
             required: true,
@@ -33,7 +33,7 @@ module.exports = {
 
 		try {
 			const body = await twitter.users(user);
-			const tweet = new MessageEmbed()
+			const tweet = new EmbedBuilder()
 				.setColor(bot.color)
 				.setAuthor({ 
 name: 					`@${body.screen_name.toLowerCase()}`,

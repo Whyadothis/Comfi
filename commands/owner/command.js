@@ -7,9 +7,7 @@
 
 const {
 	CommandInteraction,
-	MessageActionRow,
-	MessageSelectMenu,
-	MessageEmbed
+	EmbedBuilder
 } = require('discord.js')
 const clients = require('../../models/Client')
 
@@ -19,26 +17,26 @@ module.exports = {
 	ownerOnly: true,
 	options: [
 		{
-			type: 'SUB_COMMAND',
+			type: 1,
 			description: 'disable a command',
 			name: 'disable',
 			options: [
 				{
 					name: 'name',
-					type: 'STRING',
+					type: 3,
 					description: 'command name to disable',
 					required: true
 				}
 			]
 		},
 		{
-			type: 'SUB_COMMAND',
+			type: 1,
 			description: 'enable a command',
 			name: 'enable',
 			options: [
 				{
 					name: 'name',
-					type: 'STRING',
+					type: 3,
 					description: 'name of command to enable',
 					required: true
 				}
@@ -64,7 +62,7 @@ module.exports = {
 				cmd => cmd.name.toLowerCase() === name.toLowerCase()
 			)
 			if (!validCommand) {
-				const embed = new MessageEmbed()
+				const embed = new EmbedBuilder()
 					.setDescription(` >  ${bot.crosss} • Please supply a valid command!`)
 					.setColor(bot.color)
 
@@ -73,7 +71,7 @@ module.exports = {
 			client.blackListedCmds.push(validCommand.name)
 			await client.save()
 
-			const embed = new MessageEmbed()
+			const embed = new EmbedBuilder()
 				.setDescription(
 					` >  ${bot.tick} • Command \`${
 						validCommand.name
@@ -87,14 +85,14 @@ module.exports = {
 				cmd => cmd.name.toLowerCase() === name.toLowerCase()
 			)
 			if (!validCommand) {
-				const embed = new MessageEmbed()
+				const embed = new EmbedBuilder()
 					.setDescription(` >  ${bot.crosss} • Please supply a valid command!`)
 					.setColor(bot.color)
 
 				return await interaction.editReply({ embeds: [embed] })
 			}
 			if (!client.blackListedCmds.includes(validCommand.name)) {
-				const embed = new MessageEmbed()
+				const embed = new EmbedBuilder()
 					.setDescription(
 						` >  ${bot.crosss} • Please supply a valid disabled command!`
 					)
@@ -112,7 +110,7 @@ module.exports = {
 )
 
       
-				const embed = new MessageEmbed()
+				const embed = new EmbedBuilder()
 					.setDescription(
 						` >  ${bot.tick} • Command \`${
 							validCommand.name

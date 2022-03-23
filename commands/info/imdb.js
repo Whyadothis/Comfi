@@ -8,9 +8,10 @@
 const imdb = require('imdb-api')
 const {
   CommandInteraction,
-  MessageEmbed,
-  MessageButton,
-  MessageActionRow
+  EmbedBuilder,
+  ButtonBuilder,
+  ActionRowBuilder, 
+  ApplicationCommandOptionType
 } = require('discord.js')
 
 module.exports = {
@@ -20,7 +21,7 @@ module.exports = {
   directory: "info",
   options: [
     {
-      type: 'STRING',
+      type: ApplicationCommandOptionType.String,
       description: 'Name to search',
       name: 'name',
       required: true
@@ -49,7 +50,7 @@ module.exports = {
       } else {
         poster = movie.poster
       }
-      let embed = new MessageEmbed()
+      let embed = new EmbedBuilder()
         .setTitle(movie.title.toString())
         .setColor(bot.color)
         .setThumbnail(`${poster}`)
@@ -59,16 +60,16 @@ module.exports = {
         .addField('Languages', movie.languages, true)
         .addField('Type', movie.type, true)
 
-      const row = new MessageActionRow().addComponents(
-        new MessageButton()
-          .setStyle('LINK')
+      const row = new ActionRowBuilder().addComponents(
+        new ButtonBuilder()
+          .setStyle(5)
           .setURL(`${movie.imdburl}`)
           .setLabel('Imdb Url!')
       )
 
       await interaction.editReply({ embeds: [embed], components: [row] })
     } catch (e) {
-      let emed = new MessageEmbed()
+      let emed = new EmbedBuilder()
         .setTitle(`${bot.error} • Error Occured`)
         .setDescription(`\`\`\`${e ? e.stack : e}\`\`\``)
         .setColor(bot.color)

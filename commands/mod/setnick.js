@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { Interaction, MessageEmbed } = require('discord.js')
+const { Interaction, EmbedBuilder } = require('discord.js')
 const guilds = require('../../models/guild')
 
 module.exports = {
@@ -45,7 +45,7 @@ module.exports = {
 				interaction.guild.members.cache.get(args[0])
 			const nickname = interaction.options.getString('nickname')
 	const reason = interaction.options.getString("reason")		
-    const embed = new MessageEmbed().setColor(bot.color)
+    const embed = new EmbedBuilder().setColor(bot.color)
 
 			if (!member.manageable && usmber.i.userd !== bot.user.id) {
 				embed.setDescription(
@@ -72,7 +72,7 @@ module.exports = {
                   Reason: reason.length < 1 ? 'No reason supplied.' : reason
                  }, interaction)	
     } catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

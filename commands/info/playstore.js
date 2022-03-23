@@ -6,7 +6,7 @@
 */
 
 const PlayStore = require("google-play-scraper");
-const { CommandInteraction, MessageEmbed, MessageButton,  MessageActionRow } = require("discord.js");
+const { CommandInteraction, EmbedBuilder, ButtonBuilder,  ActionRowBuilder } = require("discord.js");
 
 module.exports = {
     name: "playstore",
@@ -14,7 +14,7 @@ module.exports = {
     ownerOnly: false,
     options: [
         {
-            type: 'STRING',
+            type: 3,
             description: 'The application name',
             name: 'name',
             required: true,
@@ -44,28 +44,29 @@ module.exports = {
         );
       }
 try {
-      let embed = new MessageEmbed()
+      let embed = new EmbedBuilder()
         .setColor(bot.color)
         .setThumbnail(App.icon)
         .setURL(App.url)
         .setTitle(`${App.title}`)
         .setDescription(App.summary)
-        .addField(`Price`, `${App.priceText}`)
-        .addField(`Developer`, `${App.developer}`)
-        .addField(`Score`, `${App.scoreText}`)
+        .addFields(
+      {name: `Price`, value: `${App.priceText}`},
+      {name: `Developer`, value: `${App.developer}`},
+      {name: `Score`, value: `${App.scoreText}` })
         .setFooter({text: `Requested By ${interaction.user.username}`})
         .setTimestamp();
 
-      const row = new MessageActionRow().addComponents(
-        new MessageButton()
-          .setStyle('LINK')
+      const row = new ActionRowBuilder().addComponents(
+        new ButtonBuilder()
+          .setStyle(5)
           .setURL(`${App.url}`)
           .setLabel('Go to playstore !!')
       )
   
       return await interaction.editReply({embeds: [ embed ], components:  [row]});
 } catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

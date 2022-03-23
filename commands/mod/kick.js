@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { Interaction, MessageEmbed } = require('discord.js')
+const { Interaction, EmbedBuilder } = require('discord.js')
 const guilds = require('../../models/guild')
 
 module.exports = {
@@ -17,13 +17,13 @@ module.exports = {
 		{
 			name: 'user',
 			description: 'User To Kick',
-			type: "USER",
+			type: 6,
 			required: true
 		},
 		{
 			name: 'reason',
 			description: 'Reason To Kick',
-			type: "STRING",
+			type: 3,
 			required: false
 		}
 	],
@@ -64,7 +64,7 @@ module.exports = {
 			}
 
 			if (kickMember.kickable) {
-				const sembed2 = new MessageEmbed()
+				const sembed2 = new EmbedBuilder()
 					.setColor(bot.color)
 					.setDescription(
 						`**You Have Been Kicked From ${
@@ -82,14 +82,14 @@ module.exports = {
 				)
 			}
 			if (reason) {
-				var sembed = new MessageEmbed()
+				var sembed = new EmbedBuilder()
 					.setColor(bot.color)
 					.setDescription(
 						`**${kickMember.user.username}** has been kicked for ${reason}`
 					)
 				await interaction.editReply({ embeds: [sembed] })
 			} else {
-				var sembed2 = new MessageEmbed()
+				var sembed2 = new EmbedBuilder()
 					.setColor(bot.color)
 					.setDescription(`**${kickMember.user.username}** has been kicked`)
 				await interaction.editReply({ embeds: [sembed2] }).catch(() => null)
@@ -99,7 +99,7 @@ await bot.modlog({ Member: kickMember,
                   Reason: reason.length < 1 ? 'No reason supplied.' : reason
                  }, interaction)
 		} catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

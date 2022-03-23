@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageButton, MessageActionRow, MessageEmbed, MessageAttachment } = require('discord.js')
+const { CommandInteraction, ButtonBuilder, ActionRowBuilder, EmbedBuilder, Attachment } = require('discord.js')
 const r = require('link-checker-malicious')
 const fetch = require("axios")
 
@@ -16,7 +16,7 @@ module.exports = {
   directory: "utility",
   options: [
     {
-      type: 'STRING',
+      type: 3,
       description: 'Url to take ss',
       name: 'url',
       required: true
@@ -60,17 +60,17 @@ let res = await fetch(`https://api.ultrax-yt.com/v1/screenshot?url=${url}&key=${
 
 const buffer = new Buffer.from(res.data.screenshot.split(",")[1], "base64")
   
-const image = new MessageAttachment(buffer, 'screenshot.png')
+const image = new Attachment(buffer, 'screenshot.png')
   
-const emb = new MessageEmbed()
+const emb = new EmbedBuilder()
             .setColor(bot.color)
             .setAuthor({name: `Comfi™ Screenshot System`, iconURL:  bot.user.displayAvatarURL({dynamic:true})})
             .setImage(`attachment://screenshot.png`)
             .setFooter({ text: `Requested by ${interaction.user.tag}`, iconURL: `${interaction.user.displayAvatarURL({ dynamic: true })}` });
 
-				const row = new MessageActionRow().addComponents(
-					new MessageButton()
-						.setStyle('LINK')
+				const row = new ActionRowBuilder().addComponents(
+					new ButtonBuilder()
+						.setStyle(5)
 						.setURL(`${url}`)          
           .setEmoji(`883017898984103986`)
 						.setLabel('Go to Site !!')	);

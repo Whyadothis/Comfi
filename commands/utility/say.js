@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { Interaction, MessageAttachment } = require("discord.js");
+const { Interaction, Attachment } = require("discord.js");
 const isUrl = new RegExp(
 "^(https?:\\/\\/)?" +
   "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" +
@@ -26,7 +26,7 @@ module.exports = {
     {
       name: "msg",
       description: "What To Say - text or image",
-      type: "STRING",
+      type: 3,
       required: true,
     },
   ],
@@ -45,13 +45,13 @@ module.exports = {
 
     if (isUrl.test(say)) {
 
-      const attach = new MessageAttachment(say, 'Sent_Using_Comfi.png')
+      const attach = new Attachment(say, 'Sent_Using_Comfi.png')
 
       await interaction.channel.send({ files: [attach] })
 
     } else {
 
-      if (interaction.member.permissions.has("ADMINISTRATOR")) {
+      if (interaction.member.permissions.has("Adminstrator")) {
 
         await interaction.channel.send({ content: `${say}`, allowedMentions: { repliedUser: true } })
 

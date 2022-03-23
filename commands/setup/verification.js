@@ -7,7 +7,7 @@
 
 const {
 	CommandInteraction,
-	MessageEmbed,
+	EmbedBuilder,
 	MessageCollector
 } = require('discord.js')
 const guilds = require('../../models/guild')
@@ -25,7 +25,7 @@ module.exports = {
 	 * @param {String[]} args
 	 */
 	run: async (bot, interaction, args) => {
-		const step1 = new MessageEmbed()
+		const step1 = new EmbedBuilder()
 			.setTitle(`Verfication [1]`, bot.user.displayAvatarURL())
 			.setDescription(
 				`Would you like to enable or disabled the feature? Types: \`disable\`,\`enable\``
@@ -33,19 +33,19 @@ module.exports = {
 			.setColor(bot.color)
 			.setFooter(`You can say "cancel" at any time to cancel the process`)
 
-		const step2 = new MessageEmbed()
+		const step2 = new EmbedBuilder()
 			.setTitle(`Verification [2]`, bot.user.displayAvatarURL())
 			.setDescription(`What should the verification channel be?`)
 			.setColor(bot.color)
 			.setFooter(`You can say "cancel" at any time to cancel the process`)
 
-		const step3 = new MessageEmbed()
+		const step3 = new EmbedBuilder()
 			.setTitle(`Verification [3]`, bot.user.displayAvatarURL())
 			.setDescription(`What is the verified role?`)
 			.setColor(bot.color)
 			.setFooter(`You can say "cancel" at any time to cancel the process`)
 
-		const step4 = new MessageEmbed()
+		const step4 = new EmbedBuilder()
 			.setTitle(`Verification [4]`, bot.user.displayAvatarURL())
 			.setDescription(
 				`What should the verfication message be?\n\`\`\`{{user#mention}} - the users id\n{{user#tag}} - the users tag\n{{user#id}} - the users id\n{{server#id}} - the server id\n{{server#name}} - the server name\n{{server#membercount}} - the server membercount\n\`\`\``

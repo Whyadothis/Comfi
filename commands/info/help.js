@@ -8,7 +8,7 @@
 const { readdirSync } = require('fs')
 const prefix = '/'
 const create_mh = require('../../functions/menu_help')
-const { CommandInteraction, MessageEmbed } = require('discord.js')
+const { CommandInteraction, EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
 
 module.exports = {
 	name: 'helpp',
@@ -17,7 +17,7 @@ module.exports = {
 	ownerOnly: false,
 	options: [
 		{
-			type: 'STRING',
+			type: ApplicationCommandOptionType.String,
 			description: 'particular command',
 			name: 'command',
 			required: false
@@ -72,14 +72,14 @@ module.exports = {
 					ccate.push(nome)
 				})
 
-				const embed = new MessageEmbed()
+				const embed = new EmbedBuilder()
 					.setTitle('Comfi™ Help')
 					.setDescription(
 						`My Prefix For __**${
 							interaction.guild.name
 						}**__ Is  __**${prefix}**__\n\nVisit https://comfibot.tk/commands To Get List Of All My Commands`
 					)
-					.addFields(categories)
+					.addFields(categories[0])
 					.setFooter({
 						text: `Requested by ${interaction.member.displayName}`,
 						iconURL: interaction.user.avatarURL({
@@ -147,7 +147,7 @@ module.exports = {
 					)
 
 				if (cots.includes(args[0].toLowerCase())) {
-					const combed = new MessageEmbed()
+					const combed = new EmbedBuilder()
 						.setTitle(
 							`__${args[0].charAt(0).toUpperCase() +
 								args[0].slice(1)} Commands!__`
@@ -155,7 +155,7 @@ module.exports = {
 						.setDescription(
 							`Use \`${prefix}help\` followed by a command name to get more information on a command.\nFor example: \`${prefix}help ping\`.\n\n`
 						)
-						.addFields(catts)
+						.addFields(catts[0])
 						.setFooter({
 							text: `Comfi™ Help`,
 iconURL:							interaction.user.avatarURL({
@@ -178,7 +178,7 @@ iconURL:							interaction.user.avatarURL({
 				}
 
 				if (!command) {
-					const embed = new MessageEmbed()
+					const embed = new EmbedBuilder()
 						.setTitle(
 							`Invalid command! Use \`${prefix}helpp\` for all of my commands!`
 						)
@@ -207,28 +207,28 @@ iconURL:							interaction.user.avatarURL({
 					subc = `${subc.toString().replaceAll(',', '')}\n`
 				}
 
-				const embed = new MessageEmbed()
+				const embed = new EmbedBuilder()
 					.setTitle('Command Details:')
-					.addField(
-						'Command:',
-						command.name ? `\`${command.name}\`` : 'No name for this command.'
-					)
-					.addField(
-						'Sub Commands:',
-						subc ? subc : 'No Sub Command for this command'
-					)
-					.addField(
-						'Usage:',
-						command.usage
+					.addFields({
+						name: 'Command:',
+						value: command.name ? `\`${command.name}\`` : 'No name for this command.', inline: true
+                     },
+                     {
+						name: 'Sub Commands:',
+						value: subc ? subc : 'No Sub Command for this command', inline: true
+                     },
+                     {
+						name: 'Usage:',
+						value: command.usage
 							? `\`${prefix}${command.name} ${command.usage}\``
-							: `\`${prefix}${command.name}\``
-					)
-					.addField(
-						'Command Description:',
-						command.description
+							: `\`${prefix}${command.name}\``, inline: true
+                     },
+                     {
+						name: 'Command Description:',
+						value: command.description
 							? command.description
-							: 'No description for this command.'
-					)
+							: 'No description for this command.', inline: true
+                     })
 
 					.setFooter({
 						text: `Comfi™ Help`,
@@ -249,7 +249,7 @@ iconURL:							interaction.user.avatarURL({
 						embeds: [embed]
 					})
 					.catch(e => {
-						let emed = new MessageEmbed()
+						let emed = new EmbedBuilder()
 							.setTitle(`${bot.error} • Error Occured`)
 							.setDescription(`\`\`\`${e.stack}\`\`\``)
 							.setColor(bot.color)
@@ -259,9 +259,9 @@ iconURL:							interaction.user.avatarURL({
 							embed: emed
 						})
 					})
-			}
+      }
 		} catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)
@@ -271,7 +271,7 @@ iconURL:							interaction.user.avatarURL({
 				embed: emed
 			})
 
-			interaction.followUp({
+			await interaction.followUp({
 				embeds: [
 					{
 						description: `${

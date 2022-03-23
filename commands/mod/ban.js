@@ -18,18 +18,18 @@ module.exports = {
     {
       name: 'permanent',
       description: 'Permanently Ban Someone from your Server',
-      type: 'SUB_COMMAND',
+      type: 1,
       options: [
         {
           name: 'user',
           description: 'User To Ban',
-          type: 'USER',
+          type: 6,
           required: true
         },
         {
           name: 'reason',
           description: 'Reason To Ban',
-          type: 'STRING',
+          type: 3,
           required: true
         }
       ]
@@ -37,22 +37,22 @@ module.exports = {
     {
       name: 'temporary',
       description: 'Temporary Ban a User',
-      type: 'SUB_COMMAND',
+      type: 1,
       options: [
         {
-          type: 'USER',
+          type: 6,
           description: 'User to tempmute',
           name: 'user',
           required: true
         },
         {
-          type: 'STRING',
+          type: 3,
           description: 'Time till tempban',
           name: 'time',
           required: true
         },
         {
-          type: 'STRING',
+          type: 3,
           description: 'Reason to tempban',
           name: 'reason',
           required: true
@@ -62,16 +62,16 @@ module.exports = {
     {
       name: 'hack',
       description: 'Hack/forceban a user without them knowing it',
-      type: 'SUB_COMMAND',
+      type: 1,
       options: [
         {
-          type: 'USER',
+          type: 6,
           description: 'user to hackban',
           name: 'user',
           required: true
         },
         {
-          type: 'STRING',
+          type: 3,
           description: 'reason to hackban',
           name: 'reason',
           required: true
@@ -81,12 +81,12 @@ module.exports = {
     {
       name: 'remove',
       description: 'Unban Someone',
-      type: 'SUB_COMMAND',
+      type: 1,
       options: [
         {
           name: 'user',
           description: 'UserId To Unban',
-          type: 'STRING',
+          type: 3,
           required: true
         }
       ]
@@ -137,14 +137,14 @@ try {
              for - ${reason || 'No Reason'}**`).catch(() => null)
 
         if (reason) {
-          var sembed = new MessageEmbed()
+          var sembed = new EmbedBuilder()
             .setColor(bot.color)
             .setDescription(
               `*${bot.error} • *${banMember.username}** has been banned for ${reason}`)
 
           await interaction.editReply({ embeds: [sembed] })
         } else {
-          var sembed2 = new MessageEmbed()
+          var sembed2 = new EmbedBuilder()
             .setColor(bot.color)
             .setDescription(`**${banMember.user.username}** has been banned`)
           await interaction.editReply({ embeds: [sembed2] })
@@ -183,21 +183,22 @@ await bot.modlog({ Member: banMember,
         return await  bot.errorEmbed(bot, interaction, `**You cant ban that user due to the role hierarchy**`)
       } 
         if (!reason) reason = 'No Reason Provided'
-        const tbuembed = new MessageEmbed()
+        const tbuembed = new EmbedBuilder()
           .setTitle(' You have been banned!')
           .setColor(bot.color)
-          .addField('Reason:', reason.toString())
-          .addField('Time (s)', regex.toString())
-          .addField('Moderator:', interaction.user.username)
+          .addFields(
+  {name: 'Reason:', value: reason.toString(), inline: true},
+  {name: 'Time (s)', value: regex.toString(), inline: true},
+  {name: 'Moderator:', value: interaction.user.username, inline: true})
 
-        const tbembed = new MessageEmbed()
+        const tbembed = new EmbedBuilder()
           .setTitle('Action: Tempban')
           .addField('User:', tbuser.toString())
           .setAuthor({name: `${interaction.user.username}`})
           .setColor(bot.color)
-          .addField('Reason:', reason.toString())
-          .addField('Time (s)', regex.toString())
-          .addField('Moderator:', interaction.user.username)
+          .addFields({name:'Reason:', value: reason.toString(), inline: true},
+                     {name: 'Time (s)', value: regex.toString(), inline: true},
+                     {name: 'Moderator:', value: interaction.user.username, inline: true})
 
         await interaction.editReply({ embeds: [tbembed] })
       
@@ -257,7 +258,7 @@ await bot.modlog({ Member: tbuser,
         await interaction.guild.members.ban(target, {
           reason: reason.length < 1 ? 'No reason supplied.' : reason
         })
-        const embed2 = new MessageEmbed()
+        const embed2 = new EmbedBuilder()
           .setColor(bot.color)
           .setDescription(
             `${bot.tick} • ${
@@ -311,7 +312,7 @@ await bot.modlog({ Member: target,
         })
     }
       } catch (e) {
-        let emed = new MessageEmbed()
+        let emed = new EmbedBuilder()
           .setTitle(`${bot.error} • Error Occured`)
           .setDescription(`\`\`\`${e.stack}\`\`\``)
           .setColor(bot.color)

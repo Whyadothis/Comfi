@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require('discord.js')
+const { CommandInteraction, EmbedBuilder } = require('discord.js')
 const guilds = require('../../models/guild')
 
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
 	ownerOnly: false,
 	options: [
 		{
-			type: 'STRING',
+			type: 3,
 			description: 'Toggle nqn',
 			name: 'option',
 			required: true,
@@ -50,12 +50,27 @@ module.exports = {
 			return interaction.editReply(
 				`Nqn for **${interaction.guild.name}** has been set to: **${toggle}**`
 			)
-		} catch (err) {
-			return interaction.editReply(
-				`${
-					bot.error
-				} An error has occured [Contact Support](https://comfi.xx-mohit-xx.repl.co/discord) \nError: ${err}`
-			)
-		}
+    } catch (e) {
+			let emed = new EmbedBuilder()
+				.setTitle(`${bot.error} • Error Occured`)
+				.setDescription(`\`\`\`${e.stack}\`\`\``)
+				.setColor(bot.color)
+
+			bot.sendhook(null, {
+				channel: bot.err_chnl,
+				embed: emed
+			})
+
+			interaction.followUp({
+				embeds: [
+					{
+						description: `${
+							bot.error
+						} Error, try again later \n Error: ${e} \n [Contact Support](https://comfibot.tk/discord) `,
+						color: bot.color
+					}
+				]
+			})
+    }
 	}
 }

@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require("discord.js")
+const { CommandInteraction, EmbedBuilder } = require("discord.js")
 const guilds = require("../../models/guild")
 
 module.exports = {
@@ -16,7 +16,7 @@ module.exports = {
     options: [
     {
         name: "user",
-        type: "USER",
+        type: 6,
         description: "user/bot to verify",
         required: true,
     }
@@ -47,7 +47,7 @@ module.exports = {
         ]
         });
         })
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setDescription(` > ${bot.tick} • ${member} has been verified!`)
                 .setColor(bot.color)
                 interaction.editReply({embeds: [embed]})

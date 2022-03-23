@@ -6,7 +6,7 @@
 */
 
 const axios = require('axios');
-const { CommandInteraction, MessageEmbed } = require("discord.js");
+const { CommandInteraction, EmbedBuilder } = require("discord.js");
 
 module.exports = {
     name: "sauce",
@@ -14,7 +14,7 @@ module.exports = {
     ownerOnly: false,
     options: [
         {
-            type: 'STRING',
+            type: 3,
             description: 'the image to trace anime',
             name: 'image',
             required: true,
@@ -64,7 +64,7 @@ const image = interaction.options.getString("image")
               .catch(async (err) => {
                         return await  bot.errorEmbed(bot, interaction, `Unable to trace this image`)
               })
-              const Embed = new MessageEmbed()
+              const Embed = new EmbedBuilder()
               .setTitle(`${animeDetails.title.english} | Founded`)
               .setDescription(        animeDetails.description.substring(0, 200) +
               ` **[[Read More](https://anilist.co/anime/${animeResult.anilist})]**`)
@@ -78,7 +78,7 @@ const image = interaction.options.getString("image")
               await interaction.editReply({embeds:[Embed]})
 
         }catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

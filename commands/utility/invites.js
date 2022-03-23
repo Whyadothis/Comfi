@@ -7,7 +7,7 @@
 
 const {
 	CommandInteraction,
-	MessageEmbed,
+	EmbedBuilder,
 } = require('discord.js')
 
 module.exports = {
@@ -18,7 +18,7 @@ module.exports = {
 	options: [
 		{
 			name: 'user',
-			type: 'USER',
+			type: 6,
 			description: 'tag to see their invs',
 			required: false
 		}
@@ -47,7 +47,7 @@ module.exports = {
 			let i = 0
 			userInv.forEach(inv => (i += inv.uses))
 
-			const tackerEmbed = new MessageEmbed()
+			const tackerEmbed = new EmbedBuilder()
 				.setDescription(`**_Invites  of :_** ${user} `)
 				.addField(`User Invites`, `${i}`)
 				.addField('Invite Codes:', `${invCodes}`)
@@ -55,7 +55,7 @@ module.exports = {
 
 			await interaction.followUp({ embeds: [tackerEmbed] })
 		} catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

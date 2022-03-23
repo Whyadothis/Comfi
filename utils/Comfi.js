@@ -19,26 +19,25 @@ class Comfi extends Discord.Client {
 				repliedUser: false
 			},
 			intents: [
-				'GUILDS',
-				'GUILD_MEMBERS',
-				'GUILD_BANS',
-				'GUILD_MESSAGES',
-				'GUILD_EMOJIS_AND_STICKERS',
-				'GUILD_INVITES',
-				'GUILD_MESSAGE_TYPING'
+				'Guilds',
+				'GuildMembers',
+				'GuildBans',
+        'GuildInvites',
+				'GuildEmojisAndStickers',
+				'GuildMessages',
+				'GuildMessageTyping'
 			],
 			partials: [
-				'MESSAGE',
-				'CHANNEL',
-				'REACTION',
-				'GUILD_MEMBER',
-				'GUILD',
-				'USER'
+				'Message',
+				'Channel',
+				'GuildMember',
+				'Guild',
+				'User'
 			],
 			restRequestTimeout: 30000,		
     })
 		this.logger = require('./Logger.js')
-		this.color = process.env['color'] || '#F4B3CA'
+		this.color = Discord.Util.resolveColor(process.env['color']) || Discord.Util.resolveColor("#F4B3CA")
 		this.error = process.env['error'] || '<a:error:890107682013474846>'
 		this.tick = process.env['tick'] || '<a:tick:890113862706266112>'
 		this.crosss = process.env['cross'] || '<a:cross:890113459868553277>'
@@ -180,11 +179,13 @@ class Comfi extends Discord.Client {
 		let webhook = await channel_
 			.fetchWebhooks()
 			.then(x => x.find(x => x.name === name))
-    const emb = new Discord.MessageEmbed()
+    const emb = new Discord.EmbedBuilder()
+  
     if (embed) {
-emb.setTitle(embed.title)  
-      emb.setDescription(embed.description.split(" ").slice(0, 4000).join(" "))
-emb.setColor(bot.color)    }
+emb.setTitle(embed.data.title || "Comfi™ Error")  
+      emb.setDescription(embed.data.description.split(" ").slice(0, 4000).join(" "))
+emb.setColor(bot.color)    
+    }
     
 		if (!webhook) webhook = await channel_.createWebhook(name, { avatar })
 		return await webhook.send(embed ? { embeds: [emb] } : msg).then(e => {			remove ? webhook.delete() : e		
@@ -225,7 +226,7 @@ emb.setColor(bot.color)    }
 }
 
  async successEmbed(bot, interaction, argument) {
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.EmbedBuilder()
         .setDescription(`${bot.tick} • ${argument}`)
         .setColor(bot.color);
 
@@ -233,7 +234,7 @@ emb.setColor(bot.color)    }
 
 };
  async errorEmbed(bot, interaction, argument) {
-   const embed = new Discord.MessageEmbed()
+   const embed = new Discord.EmbedBuilder()
       
         .setDescription(`${bot.error} • ${argument}`)
         .setColor("#FE6666");
@@ -259,7 +260,7 @@ if (interaction.customId) {
   auth = interaction.user.username
 } else if (!interaction.customId) {
   auth = interaction.author.username }
-   const logsembed = new Discord.MessageEmbed()
+   const logsembed = new Discord.EmbedBuilder()
    .setColor(this.color)
    .addFields({
      name: "**Modlogs**",

@@ -7,10 +7,10 @@
 
 const {
 	CommandInteraction,
-	MessageEmbed,
+	EmbedBuilder,
 	MessageCollector,
-	MessageSelectMenu,
-	MessageActionRow,
+	SelectMenuBuilder,
+	ActionRowBuilder,
 	Util
 } = require('discord.js')
 const guilds = require('../../models/guild')
@@ -30,22 +30,22 @@ module.exports = {
 		{
 			name: 'add',
 			description: 'Add / Create a Dropdown Role',
-			type: 'SUB_COMMAND'
+			type: 1
 		},
 		{
 			name: 'list',
 			description: 'Shows Server Dropdown  Roles List',
-			type: 'SUB_COMMAND'
+			type: 1
 		},
 		{
 			name: 'remove',
 			description: 'Remove / delete Dropdown Roles',
-			type: 'SUB_COMMAND',
+			type: 1,
 			options: [
 				{
 					name: 'id',
 					description: 'Id of the Dropdown role',
-					type: 'STRING',
+					type: 3,
 					required: true
 				}
 			]
@@ -72,42 +72,42 @@ module.exports = {
 				roles: [],
 				messageId: undefined
 			}
-			const step1 = new MessageEmbed()
+			const step1 = new EmbedBuilder()
 				.setTitle(`Dropdown roles [1]`)
 				.setDescription(
 					`What should the embed title be? Say "skip" to have no title!`
 				)
 				.setFooter(`Say "cancel" at any time to stop the process!`)
 				.setColor(bot.color)
-			const step2 = new MessageEmbed()
+			const step2 = new EmbedBuilder()
 				.setTitle(`Dropdown roles [2]`)
 				.setDescription(
 					`What should the embed description be? Say "roles" to make them set as the roles!`
 				)
 				.setFooter(`Say "cancel" at any time to stop the process!`)
 				.setColor(bot.color)
-			const step3 = new MessageEmbed()
+			const step3 = new EmbedBuilder()
 				.setTitle(`Dropdown roles [3]`)
 				.setDescription(
 					`What should the embed color be? Say "default" to have the default colour!`
 				)
 				.setFooter(`Say "cancel" at any time to stop the process!`)
 				.setColor(bot.color)
-			const step4 = new MessageEmbed()
+			const step4 = new EmbedBuilder()
 				.setTitle(`Dropdown roles [4]`)
 				.setDescription(
 					`What should the embed footer be? Say "skip" to have no footer!`
 				)
 				.setFooter(`Say "cancel" at any time to stop the process!`)
 				.setColor(bot.color)
-			const step5 = new MessageEmbed()
+			const step5 = new EmbedBuilder()
 				.setTitle(`Dropdown roles [5]`)
 				.setDescription(
 					`Where should the dropdown message / prompt be sent? (channel id/name/mention) Say "bind" to have it sent in the current channel!`
 				)
 				.setFooter(`Say "cancel" at any time to stop the process!`)
 				.setColor(bot.color)
-			const step6 = new MessageEmbed()
+			const step6 = new EmbedBuilder()
 				.setTitle(`Dropdown roles [6]`)
 				.setDescription(
 					`Please list your emojis and roles!  (E.G **<emoji>** **<role id/mention/name>** ) Say **done** once finshed!`
@@ -301,13 +301,13 @@ module.exports = {
 							description: `Click this to get the ${serverRoles.name} role!`
 						})
 					})
-					const row = new MessageActionRow().addComponents([
-						new MessageSelectMenu()
+					const row = new ActionRowBuilder().addComponents([
+						new SelectMenuBuilder()
 							.setPlaceholder('Choose your roles...')
 							.setCustomId('dropdown_roles')
 							.addOptions(dropdownMenuItems)
 					])
-					const finalEmbed = new MessageEmbed().setColor(finalData.embed_color)
+					const finalEmbed = new EmbedBuilder().setColor(finalData.embed_color)
 					if (finalData.embed_title !== 'skipped') {
 						finalEmbed.setTitle(finalData.embed_title)
 					}
@@ -326,10 +326,10 @@ module.exports = {
 					const finalMessage = await channel
 						.send({ embeds: [finalEmbed], components: [row] })
 						.catch(e => {
-							bot.sendhook(`Error Occured \n ${e.stack}`),
+							bot.sendhook(`Error Occured \n ${e.stack}`,
 								{
 									channel: bot.err_chnl
-								}
+								})
 						})
 
 					const msgId = getId()
@@ -348,7 +348,7 @@ module.exports = {
 							}
 						}
 					)
-					const embed = new MessageEmbed()
+					const embed = new EmbedBuilder()
 						.setColor(bot.color)
 						.setDescription(
 							` > ${bot.tick} • **Created Dropdown roles!**\n\n > ${
@@ -397,7 +397,7 @@ module.exports = {
 						}/${dd.chanId}/${dd.msgId})  `
 					)
 				})
-				const embed = new MessageEmbed()
+				const embed = new EmbedBuilder()
 					.setDescription(arr.join('\n'))
 					.setColor(bot.color)
 
@@ -473,7 +473,7 @@ module.exports = {
 				guild.dropdownRoles.splice(dropdown, 1)
 				guild.save()
 
-				const embed = new MessageEmbed()
+				const embed = new EmbedBuilder()
 					.setDescription(
 						` > ${
 							bot.tick

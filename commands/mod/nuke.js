@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require('discord.js')
+const { CommandInteraction, EmbedBuilder } = require('discord.js')
 const ms = require('ms')
 
 module.exports = {
@@ -29,7 +29,7 @@ module.exports = {
 					await ch.setPosition(interaction.channel.position)
 					await interaction.channel.delete()
 
-					const NukeEmbed = new MessageEmbed()
+					const NukeEmbed = new EmbedBuilder()
 						.setColor(bot.color)
 						.setDescription(
 							`${bot.tick}• **${
@@ -48,7 +48,7 @@ module.exports = {
 				})
 				.catch(() => null)
 		} catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

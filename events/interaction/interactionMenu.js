@@ -2,10 +2,9 @@ const bot = require('../../index')
 const { readdirSync } = require('fs')
 const prefix = '/'
 const {
-	MessageEmbed,
-	MessageActionRow,
-	MessageButton,
-	MessageSelectMenuMenu
+	EmbedBuilder,
+	ActionRowBuilder,
+	SelectMenuBuilder
 } = require('discord.js')
 const data = require("../../models/Client")
 

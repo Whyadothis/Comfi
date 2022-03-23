@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require("discord.js")
+const { CommandInteraction, EmbedBuilder } = require("discord.js")
 const users = require(`../../models/users`)
 const guilds = require("../../models/guild")
 
@@ -22,6 +22,9 @@ module.exports = {
 */
 
   run: async (bot, interaction, args) => {
+
+try {
+    
     const guild = await guilds.findOne({ guildId: interaction.guild.id })
     
     const rep = await bot.emoji("reply")
@@ -65,7 +68,7 @@ module.exports = {
           })
           msg.delete().catch(() => null)
           
-          const embed = new MessageEmbed()
+          const embed = new EmbedBuilder()
             .setAuthor({name:`${interaction.guild.name}'s ranking leaderboard! (Top 15)`, iconURL: interaction.guild.iconURL({ dynamic: true })})
             .setDescription(top10.slice(0, 15).join("\n"))
             .setFooter({text: `Requested by ${interaction.member.displayName}`, iconURL:  interaction.user.avatarURL({dynamic: true})})
@@ -76,6 +79,28 @@ module.exports = {
     } else {
       return interaction.editReply({ content: `${bot.crosss} • Server levels are not enabled!` })
     }
+} catch (e) {
+			let emed = new EmbedBuilder()
+				.setTitle(`${bot.error} • Error Occured`)
+				.setDescription(`\`\`\`${e.stack}\`\`\``)
+				.setColor(bot.color)
+
+			bot.sendhook(null, {
+				channel: bot.err_chnl,
+				embed: emed
+			})
+
+			interaction.followUp({
+				embeds: [
+					{
+						description: `${
+							bot.error
+						} Error, try again later \n Error: ${e} \n [Contact Support](https://comfibot.tk/discord) `,
+						color: bot.color
+					}
+				]
+			})
+        }
   }
 } 
   function shortener(count) {

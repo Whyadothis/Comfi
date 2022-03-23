@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require('discord.js')
+const { CommandInteraction, EmbedBuilder,  ApplicationCommandOptionType } = require('discord.js')
 const axios = require('axios')
 module.exports = {
 	name: 'djsdocs',
@@ -14,7 +14,7 @@ module.exports = {
 	options: [
 		{
 			name: 'query',
-			type: 'STRING',
+			type: ApplicationCommandOptionType.String,
 			description: 'Your query',
 			required: true
 		}
@@ -44,7 +44,7 @@ module.exports = {
 					}
 				})
 		} catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

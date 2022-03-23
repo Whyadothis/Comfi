@@ -1,4 +1,4 @@
-let { MessageEmbed } = require('discord.js')
+let { EmbedBuilder, Util } = require('discord.js')
 let bot = require('../../index.js')
 
 /* 
@@ -11,9 +11,9 @@ let bot = require('../../index.js')
 bot
 	.on('disconnect', e => bot.logger.log(`disconnect \n` + e))
 	.on('reconnecting', e => bot.logger.log(`Bot is reconnecting \n` + e))
-	.on('error', e => bot.logger.error(`error \n` + e))
-	.on('rateLimit', err => {
-			let emed = new MessageEmbed()
+	.on('error', e => bot.logger.error(`error \n` + e.stack))
+	.rest.on('rateLimit', err => {
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`Timeout: ${err.timeout}\n Limit: ${bot.ms(err.limit)}\n Method: ${err.method}\nPath: ${err.path}\nRoute: ${err.route}\nGlobal: ${err.global}`)
 				.setColor(bot.color)
@@ -42,14 +42,14 @@ if (reason.stack.includes("DiscordAPIError: Invalid Webhook Token")) return;
 if (reason.stack.includes("DiscordAPIError: Missing Permissions")) return;  
   */
   
-	const embed = new MessageEmbed()
+	const embed = new EmbedBuilder()
 		.setTitle(`${bot.error} • Unhandled Rejection`)
 		.setURL('https://nodejs.org/api/process.html#event-unhandledrejection')
 		.setDescription(`\`\`\`${reason.stack.split("").slice(0, 3500).join("")}\`\`\``)
 		.setTimestamp()
 		.setImage('https://giffiles.alphacoders.com/354/35481.gif')
 		.setFooter({text: 'Imagine a bot without anti-crash'})
-		.setColor(bot.color)
+		.setColor(Util.resolveColor(bot.color))
 
 	if (channel) {
 		channel.send({ embeds: [embed] })
@@ -61,14 +61,14 @@ if (reason.stack.includes("DiscordAPIError: Missing Permissions")) return;
 process.on('uncaughtException', (err, origin) => {
 	const channel = bot.channels.cache.find(c => c.id === bot.err_chnl)
 
-	const embed = new MessageEmbed()
+	const embed = new EmbedBuilder()
 		.setTitle(`${bot.error} • Uncaught Exception`)
 		.setURL('https://nodejs.org/api/process.html#event-uncaughtexception')
 		.setDescription(`\`\`\`${err.stack.split("").slice(0, 3500).join("")}\`\`\``)
 		.setTimestamp()
 		.setImage('https://giffiles.alphacoders.com/354/35481.gif')
 		.setFooter({text:'Imagine a bot without anti-crash'})
-		.setColor('#FF5757')
+		.setColor(Util.resolveColor('#FF5757'))
 
 	if (channel) {
 		channel.send({ embeds: [embed] })
@@ -80,17 +80,16 @@ process.on('uncaughtException', (err, origin) => {
 process.on('uncaughtExceptionMonitor', (err, origin) => {
 	const channel = bot.channels.cache.find(c => c.id === bot.err_chnl)
 
-	const embed = new MessageEmbed()
+	const embed = new EmbedBuilder()
 		.setTitle(`${bot.error} • Uncaught Exception Monitor`)
 		.setURL(
 			'https://nodejs.org/api/process.html#event-uncaughtexceptionmonitor'
 		)
-		.addField('Origin', origin.toString(), true)
 		.setDescription(`\`\`\`${err.stack.split("").slice(0, 3500).join("")}\`\`\``)
 		.setImage('https://giffiles.alphacoders.com/354/35481.gif')
 		.setTimestamp()
 		.setFooter({text: 'Imagine a bot without anti-crash'})
-		.setColor('#FF5757')
+		.setColor(Util.resolveColor('#FF5757'))
 
 	if (channel) {
 		channel.send({ embeds: [embed] })

@@ -5,6 +5,8 @@
 * For more information, see README.md and LICENSE 
 */
 
+const { ApplicationCommandOptionType } = require('discord.js')
+
 module.exports = {
 	name: 'anime',
 	description: 'Get Anime Actions',
@@ -14,7 +16,7 @@ module.exports = {
 			name: 'category',
 			description: 'which action do you want',
 			required: true,
-			type: 'STRING',
+			type: 3,
 			choices: [
 				{
 					name: 'cuddle',
@@ -112,7 +114,7 @@ module.exports = {
 		},
     {
       name: "user",
-      type: "USER",
+      type: 6,
       description: "user to send anime gif",
       required: true
     },

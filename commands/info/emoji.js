@@ -7,10 +7,12 @@
 
 const {
   CommandInteraction,
-  MessageEmbed,
-  MessageButton,
-  MessageActionRow,
-  Util
+  EmbedBuilder,
+  ButtonBuilder,
+  ActionRowBuilder, 
+  ButtonStyle,
+  Util,
+  ApplicationCommandOptionType
 } = require('discord.js')
 const simplydjs = require('simply-djs')
 
@@ -23,10 +25,10 @@ module.exports = {
     {
       name: "enlarge",
       description: "enlarge one or more than one emotes",
-      type: "SUB_COMMAND",
+      type: ApplicationCommandOptionType.Subcommand,
       options: [
         {
-          type: 'STRING',
+          type: ApplicationCommandOptionType.String,
           description: 'Emojis to Enlarge',
           name: 'name',
           required: true
@@ -36,12 +38,12 @@ module.exports = {
     {
       name: "find",
       description: "find an emote from Comfi's emote list",
-      type: "SUB_COMMAND",
+      type: ApplicationCommandOptionType.Subcommand,
       options: [
         {
           name: "emote",
           description: `enter a name to search emote or \`all\` to get list of all emotes`,
-          type: "STRING",
+          type: ApplicationCommandOptionType.String,
           required: true
         }
       ],
@@ -91,7 +93,7 @@ module.exports = {
               emo.animated ? 'gif' : 'png'
               }`
 
-            let embed = new MessageEmbed()
+            let embed = new EmbedBuilder()
               .setColor(bot.color)
               .setAuthor({
                 name: 'Comfi™ Enlarged Emoji',
@@ -100,18 +102,18 @@ iconURL:                interaction.user.avatarURL({ dynamic: true })
               .setImage(`${img}`)
               .setDescription(`${emo.name} ${emo.id}`)
 
-            const row = new MessageActionRow().addComponents(
-              new MessageButton()
-                .setStyle('SECONDARY')
+            const row = new ActionRowBuilder().addComponents(
+              new ButtonBuilder()
+                .setStyle(ButtonStyle.Secondary)
                 .setCustomId(`backEmoji`)
                 .setEmoji('884420649580363796')
                 .setDisabled(true),
-              new MessageButton()
-                .setStyle('LINK')
+              new ButtonBuilder()
+                .setStyle(ButtonStyle.Link)
                 .setURL(`${res}`)
                 .setLabel('Download!'),
-              new MessageButton()
-                .setStyle('SECONDARY')
+              new ButtonBuilder()
+                .setStyle(ButtonStyle.Secondary)
                 .setCustomId('forwardEmoji')
                 .setEmoji('884420650549272586')
                 .setDisabled(true)
@@ -139,7 +141,7 @@ iconURL:                interaction.user.avatarURL({ dynamic: true })
                 emo.animated ? 'gif' : 'png'
                 }`
 
-              let embed = new MessageEmbed()
+              let embed = new EmbedBuilder()
                 .setColor(bot.color)
                 .setAuthor({
                   name:'Enlarged Emoji',
@@ -186,7 +188,7 @@ iconURL:                  interaction.user.avatarURL({ dynamic: true })
               emo.animated ? 'gif' : 'png'
               }`
 
-            let embed = new MessageEmbed()
+            let embed = new EmbedBuilder()
               .setColor(bot.color)
               .setAuthor({
                 name: 'Comfi™ Emojis',
@@ -232,7 +234,7 @@ iconURL:                interaction.user.avatarURL({ dynamic: true })
               emo.animated ? 'gif' : 'png'
               }`
 
-            let embed = new MessageEmbed()
+            let embed = new EmbedBuilder()
               .setColor(bot.color)
               .setAuthor({
                 name: 'Comfi™ Emojis',
@@ -270,7 +272,7 @@ iconURL:                interaction.user.avatarURL({ dynamic: true })
             emo.animated ? 'gif' : 'png'
             }`
 
-          let embed = new MessageEmbed()
+          let embed = new EmbedBuilder()
             .setColor(bot.color)
             .setAuthor({
               name: 'Comfi™ Emojis',
@@ -279,18 +281,18 @@ iconURL:              interaction.user.avatarURL({ dynamic: true })
             .setImage(`${img}`)
             .setDescription(`${emo.name} ${emo.id}`)
 ;
-          const row = new MessageActionRow().addComponents(
-            new MessageButton()
-              .setStyle('SECONDARY')
+          const row = new ActionRowBuilder().addComponents(
+            new ButtonBuilder()
+              .setStyle(ButtonStyle.Secondary)
               .setCustomId(`backEmoji`)
               .setEmoji('884420649580363796')
               .setDisabled(true),
-            new MessageButton()
-              .setStyle('LINK')
+            new ButtonBuilder()
+              .setStyle(ButtonStyle.Link)
               .setURL(`${res}`)
               .setLabel('Download!'),
-            new MessageButton()
-              .setStyle('SECONDARY')
+            new ButtonBuilder()
+              .setStyle(ButtonStyle.Secondary)
               .setCustomId('forwardEmoji')
               .setEmoji('884420650549272586')
               .setDisabled(true)
@@ -308,7 +310,7 @@ iconURL:              interaction.user.avatarURL({ dynamic: true })
       }
       }
       }	catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

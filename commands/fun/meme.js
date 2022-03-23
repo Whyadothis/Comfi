@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { MessageEmbed, CommandInteraction } = require('discord.js');
+const { EmbedBuilder, CommandInteraction } = require('discord.js');
 const fetch = require('node-fetch')
 
 module.exports = {
@@ -27,7 +27,7 @@ try {
         await fetch('http://meme-api.herokuapp.com/gimme/memes')
         .then(response => response.json())
         .then(async(r) => {
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
             .setImage(`${r.url}`)
             .setTitle(`${r.title}`)
             .setURL(`${r.postLink}`)
@@ -37,9 +37,9 @@ try {
 await interaction.editReply({embeds: [embed]}).catch((e) => {
         bot.sendhook(
           `Error Occured \n ${e.stack}`
-        ), {
+        , {
           channel: bot.err_chnl
-        } 
+        } )
         interaction.followUp({
           content: `${bot.error} Error, try again later \n Error: ${e} \n [Contact Support](https://comfibot.tk/discord) `,
           ephemeral: true
@@ -48,7 +48,7 @@ await interaction.editReply({embeds: [embed]}).catch((e) => {
     })
 
 } catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

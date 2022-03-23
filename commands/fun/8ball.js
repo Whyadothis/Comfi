@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { Client, CommandInteraction, MessageEmbed } = require('discord.js')
+const { Client, CommandInteraction, EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
 
 module.exports = {
 	name: '8ball',
@@ -14,7 +14,7 @@ module.exports = {
   directory: "fun",
 	options: [
 		{
-			type: 'STRING',
+			type: 3,
 			description: 'Your question',
 			name: 'question',
 			required: true
@@ -63,7 +63,7 @@ module.exports = {
 			if (!yq) {
 				return
 			} else {
-				const embed = new MessageEmbed()
+				const embed = new EmbedBuilder()
 					.setAuthor(
 						`${member.user.tag} Asked me`,
 						member.user.avatarURL({ dynamic: true })
@@ -77,7 +77,7 @@ module.exports = {
 				interaction.followUp({ embeds: [embed] }).catch(() => null)
 			}
 		} catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

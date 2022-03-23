@@ -1,9 +1,9 @@
 const bot = require('../../index')
 const {
-	MessageEmbed,
-	MessageButton,
-	MessageActionRow,
-	Permissions
+	EmbedBuilder,
+	ButtonBuilder,
+	ActionRowBuilder,
+	PermissionsBitField, ButtonStyle
 } = require('discord.js')
 const guilds = require(`../../models/guild`)
 
@@ -20,18 +20,18 @@ bot.on('guildCreate', async guild => {
 	{
 		let ch = guild.channels.cache.find(
 			channel =>
-				channel.type === 'GUILD_TEXT' &&
+				channel.type === 'GuildText' &&
 				channel.permissionsFor(guild.me).has('SEND_MESSAGES')
 		)
 
-		let button = new MessageButton()
+		let button = new ButtonBuilder()
 			.setStyle('LINK')
 			.setLabel('Support')
 			.setURL(`https://discord.gg/remYPHCVgW`)
 
-		const row = new MessageActionRow().addComponents(button)
+		const row = new ActionRowBuilder().addComponents(button)
 
-		let msg = new MessageEmbed()
+		let msg = new EmbedBuilder()
 			.setTitle(
 				'<a:pinkheart_cs:883033001599074364> Thanks for adding me! <a:pinkheart_cs:883033001599074364>'
 			)
@@ -54,7 +54,7 @@ bot.on('guildCreate', async guild => {
 		const Channel = guild.channels.cache
 			.find(
 				ch =>
-					ch.type == 'GUILD_TEXT' &&
+					ch.type == 'GuildText' &&
 					ch.permissionsFor(ch.guild.me).has('CREATE_INSTANT_INVITE')
 			)
 			.createInvite({

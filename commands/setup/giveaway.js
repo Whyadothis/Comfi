@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require("discord.js");
+const { CommandInteraction, EmbedBuilder } = require("discord.js");
 const simplydjs = require("simply-djs");
 let { Database } = require('quickmongo')
 let db = new Database(process.env.Mongoose)
@@ -50,7 +50,7 @@ module.exports = {
      * @param {String[]} args
      */
     run: async (bot, interaction, args) => {
-
+try {
 simplydjs.giveawaySystem(bot, db, interaction, {
   slash: true,
   args: args,
@@ -59,5 +59,26 @@ simplydjs.giveawaySystem(bot, db, interaction, {
   winners: args[1],
   prize: args[2],
 })
+    } catch (e) {
+			let emed = new EmbedBuilder()
+				.setTitle(`${bot.error} • Error Occured`)
+				.setDescription(`\`\`\`${e.stack}\`\`\``)
+				.setColor(bot.color)
 
+			bot.sendhook(null, {
+				channel: bot.err_chnl,
+				embed: emed
+			})
+
+			interaction.followUp({
+				embeds: [
+					{
+						description: `${
+							bot.error
+						} Error, try again later \n Error: ${e} \n [Contact Support](https://comfibot.tk/discord) `,
+						color: bot.color
+					}
+				]
+			})
+}
     }}   

@@ -6,7 +6,7 @@
 */
 
 const fetch = require('axios');
-const { CommandInteraction, MessageEmbed } = require("discord.js");
+const { CommandInteraction, EmbedBuilder} = require("discord.js");
 
 module.exports = {
   name: "translatee",
@@ -16,12 +16,12 @@ module.exports = {
   options: [{
     name: "text",
     description: "The text to translate",
-    type: "STRING",
+    type: 3,
     required: true
   }, {
     name: "to",
     description: "The language you want your text to translate to",
-    type: "STRING",
+    type: 3,
     choices: [
       {
         name: "english",
@@ -96,7 +96,7 @@ module.exports = {
   }, {
     name: "from",
     description: "The language you are translating from",
-    type: "STRING",
+    type: 3,
     choices: [
       {
         name: "auto",
@@ -196,14 +196,14 @@ module.exports = {
 
 if (!result.data || result.data.translation) return await  bot.errorEmbed(bot, interaction, `Something Went Wrong While Translating`)
       
-       const embed = new MessageEmbed()
+       const embed = new EmbedBuilder()
           .setTitle("Comfi™ Translation")
           .setDescription(`Translation: ${result.data.translation}`) 
           .setColor(bot.color)
       
       await interaction.editReply({ embeds: [embed] })
     } catch (e) {
-      let emed = new MessageEmbed()
+      let emed = new EmbedBuilder()
         .setTitle(`${bot.error} • Error Occured`)
         .setDescription(`\`\`\`${e.stack}\`\`\``)
         .setColor(bot.color)

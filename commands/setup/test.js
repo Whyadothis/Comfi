@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require("discord.js");
+const { CommandInteraction, EmbedBuilder } = require("discord.js");
 const guilds = require("../../models/guild")
 
 module.exports = {
@@ -15,17 +15,17 @@ module.exports = {
   directory: "setting",
     options: [
         {
-            type: 'SUB_COMMAND',
+            type: 1,
             description: 'Test Boost Detector System',
             name: 'boost',
         },
         {
-            type: 'SUB_COMMAND',
+            type: 1,
             description: 'Test Leave System',
             name: 'leave',
         },
         {
-            type: 'SUB_COMMAND',
+            type: 1,
             description: 'Test Welcome System',
             name: 'welcome',
         },
@@ -38,7 +38,9 @@ module.exports = {
      * @param {String[]} args
      */
     run: async (bot, interaction, args) => {
-      
+ 
+try {
+     
     let guild = await guilds.findOne({ 
       guildId: interaction.guild.id
     });
@@ -71,5 +73,28 @@ module.exports = {
       interaction.editReply({content: `${bot.crosss} • Welcomes System is Disabled `})
     }
   }
-    
+
+    } catch (e) {
+			let emed = new EmbedBuilder()
+				.setTitle(`${bot.error} • Error Occured`)
+				.setDescription(`\`\`\`${e.stack}\`\`\``)
+				.setColor(bot.color)
+
+			bot.sendhook(null, {
+				channel: bot.err_chnl,
+				embed: emed
+			})
+
+			interaction.followUp({
+				embeds: [
+					{
+						description: `${
+							bot.error
+						} Error, try again later \n Error: ${e} \n [Contact Support](https://comfibot.tk/discord) `,
+						color: bot.color
+					}
+				]
+			})
+            }
+  
     }}

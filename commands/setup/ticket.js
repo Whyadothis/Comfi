@@ -7,7 +7,7 @@
 
 const guilds = require('../../models/guild');
 const simplydjs = require("simply-djs")
-const { CommandInteraction, MessageEmbed } = require("discord.js");
+const { CommandInteraction, ChannelType, EmbedBuilder } = require("discord.js");
 
 module.exports = {
     name: "ticket",
@@ -16,26 +16,26 @@ module.exports = {
     ownerOnly: false,
     options: [
         {
-            type: 'SUB_COMMAND',
+            type: 1,
             description: 'Sets the category for ticket system',
             name: 'category',            
             options : [
           {
-            type: 'CHANNEL',
+            type: 7,
             description: 'Category id to open tickets',
-            channelTypes: ["GUILD_CATEGORY"],
+            channelTypes: [ChannelType.GuildCategory],
             name: 'id',
             required: true,
         },
               ],
         },
         {
-            type: 'SUB_COMMAND',
+            type: 1,
             description: 'Sets the support role for ticket system',
             name: 'role',
             options: [
             {
-            type: 'ROLE',
+            type: 8,
             description: 'Support role for tickets',
             name: 'role',
             required: true,
@@ -43,12 +43,12 @@ module.exports = {
             ],
         },
         {
-            type: 'SUB_COMMAND',
+            type: 1,
             description: 'Sends the ticket panel',
             name: 'display',
             options: [
             {
-            type: 'STRING',
+            type: 3,
             description: 'Subject of the ticket',
             name: 'subject',
             required: false,
@@ -56,7 +56,7 @@ module.exports = {
             ],
         },
         {
-            type: 'SUB_COMMAND',
+            type: 1,
             description: 'Disables ticket system',
             name: 'disable',
         },
@@ -68,9 +68,11 @@ module.exports = {
      * @param {CommandInteraction} interaction
      * @param {String[]} args
      */
-    run: async (bot, interaction, args, message) => {
+    run: async (bot, interaction, args) => {
 
 let [ option ] = args
+
+try {
  
  const guild = await guilds.findOne({guildId:  interaction.guild.id })
   
@@ -139,5 +141,26 @@ await guilds.findOneAndUpdate({guildId: interaction.guild.id}, {
                   })
         return await bot.successEmbed(bot, interaction, `Disabled Ticket System for this guild`)
 }
-      
+        } catch (e) {
+			let emed = new EmbedBuilder()
+				.setTitle(`${bot.error} • Error Occured`)
+				.setDescription(`\`\`\`${e.stack}\`\`\``)
+				.setColor(bot.color)
+
+			bot.sendhook(null, {
+				channel: bot.err_chnl,
+				embed: emed
+			})
+
+			interaction.followUp({
+				embeds: [
+					{
+						description: `${
+							bot.error
+						} Error, try again later \n Error: ${e} \n [Contact Support](https://comfibot.tk/discord) `,
+						color: bot.color
+					}
+				]
+			})
+}    
   }}

@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { CommandInteraction, MessageEmbed } = require('discord.js')
+const { CommandInteraction, EmbedBuilder } = require('discord.js')
 
 module.exports = {
 	name: 'deafan',
@@ -14,13 +14,13 @@ module.exports = {
   directory: "mod",
 	options: [
 		{
-			type: 'USER',
+			type: 6,
 			description: 'user to deafen',
 			name: 'user',
 			required: true
 		},
 		{
-			type: 'STRING',
+			type: 3,
 			description: 'reason to deafen',
 			name: 'reason',
 			required: true
@@ -51,7 +51,7 @@ module.exports = {
 			await member.voice.setDeaf(true, reason)
 			interaction.editReply(`${bot.tick} • Deafened ${member.user.username} `)
 		} catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)

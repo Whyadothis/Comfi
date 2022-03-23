@@ -5,7 +5,7 @@
 * For more information, see README.md and LICENSE 
 */
 
-const { MessageEmbed, MessageActionRow, MessageButton, Permissions } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, permissions, ButtonStyle } = require("discord.js");
 
 module.exports = {
     name: "announce",
@@ -18,15 +18,15 @@ module.exports = {
         { 
           name: "channel", 
           description: "Channel where you want to send the announcement.",
-          type: "CHANNEL",
-          channelTypes: ["GUILD_TEXT"],
+          type: 7,
+          channelTypes: [0],
           required: true
         },
         { 
           name: "message",
           description: "The message", 
           required: true,
-          type: "STRING"
+          type: 3
         },
     ],
   run: async (bot, interaction, args) => {
@@ -47,15 +47,16 @@ module.exports = {
         if (!channel1) return;      
       channel1.send({ embeds: [embed]}).catch(() => null)
   
-      let everyonebtn = new MessageButton().setCustomId("everyone").setLabel("@Everyone").setEmoji("📡").setStyle('SUCCESS')
-      let ghostbtn = new MessageButton().setCustomId("ghostping").setLabel("Ghost-Ping").setEmoji("👻").setStyle('SECONDARY')
-      let herebtn = new MessageButton().setCustomId("here").setLabel("@Here").setEmoji("🏠").setStyle('SECONDARY')
+      let everyonebtn = new MessageButton().setCustomId("everyone").setLabel("@Everyone").setEmoji("📡").setStyle(ButtonStyle.Secondary)
+      let ghostbtn = new ButtonBuilder().setCustomId("ghostping").setLabel("Ghost-Ping").setEmoji("👻").setStyle(2
+)
+      let herebtn = new MessageButton().setCustomId("here").setLabel("@Here").setEmoji("🏠").setStyle(2)
           
-        let delbtn = new MessageButton().setCustomId("delete").setLabel("Delete").setEmoji("❌").setStyle('DANGER')
+        let delbtn = new ButtonBuilder().setCustomId("delete").setLabel("Delete").setEmoji("❌").setStyle(ButtonStyle.Danger)
           
-        const row = new MessageActionRow().addComponents(everyonebtn, herebtn, ghostbtn, delbtn)
+        const row = new ActionRowBuilder().addComponents(everyonebtn, herebtn, ghostbtn, delbtn)
         
-      const done = new MessageEmbed()
+      const done = new EmbedBuilder()
               .setTitle(`Successful`)
               .setDescription(`${bot.tick} • The announcement was successfully sent to ${channel1}.`)
               .setColor(bot.color);
@@ -64,7 +65,7 @@ module.exports = {
           
        let collector = await sent.createMessageComponentCollector({time: 60000})
 
-        const disable = new MessageActionRow().addComponents(
+        const disable = new ActionRowBuilder().addComponents(
          everyonebtn.setDisabled(true),
          herebtn.setDisabled(true),
          ghostbtn.setDisabled(true)
@@ -72,7 +73,7 @@ module.exports = {
           
         collector.on("collect", (inter) => {
                       
-        if (!inter.member.permissions.has("ADMINISTRATOR")) {
+        if (!inter.member.permissions.has(Adminstrator)) {
           return  inter.reply({content: `${bot.error} • You need admin permission to use these buttons`,  ephemeral: true})
         } else {    
                       
@@ -118,7 +119,7 @@ if (reason == "time") {
     })
           
         } catch (e) {
-			let emed = new MessageEmbed()
+			let emed = new EmbedBuilder()
 				.setTitle(`${bot.error} • Error Occured`)
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.setColor(bot.color)
